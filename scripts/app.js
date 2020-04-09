@@ -33,7 +33,7 @@ function init() {
   createCells()
   cells[tetriminoPosition].classList.add('gold')
 
-  function tetriminoFalling() {
+  function tetriminoFalling(event) {
 
     // const x = tetriminoPosition % width
     // const y = Math.floor(tetriminoPosition / width)
@@ -43,26 +43,38 @@ function init() {
       cells[tetriminoPosition].classList.remove('gold')
       tetriminoPosition += width
       cells[tetriminoPosition].classList.add('gold')
-      console.log(tetriminoPosition)
+
+
       if (tetriminoPosition > 227) clearInterval(timerId)
 
-    }, 200)
+    }, 1000)
   }
-
-
-
 
   tetriminoFalling()
 
+  function moveTetriminos(event) {
+    cells[tetriminoPosition].classList.remove('gold')
 
+    switch (event.keyCode) {
+      case 39:
+        console.log('should move right')
+        tetriminoPosition++
+        break
+      case 37:
+        console.log('should move left')
+        tetriminoPosition--
+        break
+      default:
+        console.log('invalid key')
+    }
 
+    cells[tetriminoPosition].classList.add('gold')
+  }
 
+  // * Event Listeners
 
-
-
-
-
-
+  document.addEventListener('keyup', moveTetriminos)
+  
 
 
 }
