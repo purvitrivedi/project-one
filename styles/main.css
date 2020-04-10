@@ -29,14 +29,14 @@ body {
   justify-content: center;
   height: 500px;
   width: 326px;
-  font-size:10px;
+  font-size: 10px;
   border: 1px solid red
 }
 
 .grid div {
   border: 1px solid pink;
   flex-grow: 1;
-  height:25px;
+  height: 25px;
   width: 25px;
 }
 
@@ -44,6 +44,37 @@ body {
   background-color: lightgrey;
 }
 
-.gold {
+#gold-shape {
   background-color: gold;
+}
+
+#o-shape {
+  background-color: black;
+}
+
+#i-shape {
+  background-color:seagreen;
+}
+
+#s-shape {
+  background-color: royalblue;
+
+}
+
+#z-shape {
+  background-color: crimson;
+}
+
+
+#l-shape {
+  background-color: aquamarine;
+}
+
+#j-shape {
+  background-color: indianred;
+}
+
+
+#t-shape {
+  background-color: teal;
 }
