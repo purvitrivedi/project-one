@@ -16,6 +16,15 @@ function init() {
 
   let pos = 5
 
+  const oShape = [pos, pos + 1, pos + width, pos + width + 1]
+  const iShape = [pos, pos - 1, pos - 2, pos + 1]
+  const sShape = [pos, pos + 1, pos + width, pos + width - 1]
+  const zShape = [pos, pos - 1, pos + width, pos + width + 1]
+  const lShape = [pos, pos - 1 + width, pos - 1, pos + 1]
+  const jShape = [pos, pos - 1, pos + 1, pos + 1 + width]
+  const tShape = [pos, pos + width, pos - 1, pos + 1]
+
+
   //*Functions
 
 
@@ -32,44 +41,45 @@ function init() {
   }
 
   createCells()
-  // cells[pos].classList.add('gold')
 
-  function tetriminoFalling(event) {
+
+
+  function tetriminoFalling() {
 
     // const x = tetriminoPosition % width
     // const y = Math.floor(tetriminoPosition / width)
     // console.log(y)
 
     const timerId = setInterval(() => {
-      cells[pos].classList.remove('gold')
+      cells[pos].classList.remove('gold-shape')
       pos += width
-      cells[pos].classList.add('gold')
+      cells[pos].classList.add('gold-shape')
 
 
       if (pos > 227) clearInterval(timerId)
 
-    }, 1000)
+    }, 500)
   }
 
   // tetriminoFalling()
 
   function moveTetriminos(event) {
-    cells[pos].classList.remove('gold')
+    cells[pos].classList.remove('gold-shape')
 
     switch (event.keyCode) {
       case 39:
         console.log('should move right')
-        tetriminoPosition++
+        pos++
         break
       case 37:
         console.log('should move left')
-        tetriminoPosition--
+        pos--
         break
       default:
         console.log('invalid key')
     }
 
-    cells[pos].classList.add('gold')
+    cells[pos].classList.add('gold-shape')
   }
 
   // * Event Listeners
@@ -78,6 +88,8 @@ function init() {
 
 
 
+  // * Tetriminos
+
   class Tetrimino {
     constructor(name, dimensions, className) {
       this.name = name
@@ -85,10 +97,15 @@ function init() {
       this.className = className
 
     }
-
     createShape() {
       this.dimensions.forEach(cell => {
         cells[cell].classList.add(this.className)
+      })
+    }
+
+    removeShape() {
+      this.dimensions.forEach(cell => {
+        cells[cell].classList.remove(this.className)
       })
     }
 
@@ -100,11 +117,9 @@ function init() {
     }
 
     rotate() {
-      this.dimensions.forEach(cell => {
-        cells[cell].classList.remove(this.className)
-      })
+      this.removeShape()
       pos = pos + width
-      this.dimensions = [pos - width, pos, pos + width, pos + width * 2]  
+      this.dimensions = [pos - width, pos, pos + width, pos + width * 2]
 
       this.createShape()
 
@@ -112,172 +127,164 @@ function init() {
   }
 
 
-  const o = new Tetrimino('o', [pos, pos + 1, pos + width, pos + width + 1],'o-shape')
-  const i = new I('i', [pos, pos - 1, pos - 2, pos + 1], 'i-shape')
-
-  i.createShape()
-  i.rotate()
-
-
-
-  // // * l shape work
-
-  // const line = [pos, pos - 1, pos - 2, pos + 1]
-
-
-  // pos = pos + width
-  // line[0] = pos - width
-  // line[1] = pos
-  // line[2] = pos + width 
-  // line[3] = pos + width * 2
-
-
-  // line.forEach(cell => {
-  //   cells[cell].id = 'i-shape'
-  // })
-
-
-
-
-
-
-  // // * s shape work
-
-  // const s = [pos, pos + 1, pos + width, pos + width - 1]
-
-  // pos = pos + width
-  // s[1] = pos - width
-  // s[2] = pos + 1
-  // s[3] = pos + 1 + width
-
-  // s.forEach(cell => {
-  //   cells[cell].id = 's-shape'
-  // })
-
-
-
-
-
-  // // * z shape work
-
-  // const z = [pos, pos - 1, pos + width, pos + width + 1]
-
-  // pos = pos + width
-  // z[0] = pos
-  // z[1] = pos + width
-  // z[2] = pos + 1
-  // z[3] = pos + 1 - width
-
-
-  // z.forEach(cell => {
-  //   cells[cell].id = 'z-shape'
-  // })
-
-
-
-
-
-  // * l shape work
-
-  // // * start point
-  // const l = [pos, pos - 1 + width, pos - 1, pos + 1]
-
-  // //* first rotation
-  // pos = pos + width
-  // l[0] = pos
-  // l[1] = pos - width
-  // l[2] = pos + width
-  // l[3] = pos + width + 1
-
-
-  // //* second rotation
-
-  // l[0] = pos
-  // l[1] = pos - 1
-  // l[2] = pos + 1
-  // l[3] = pos - width + 1
-
-  // //* third rotation
-
-  // l[0] = pos
-  // l[1] = pos - width
-  // l[2] = pos + width
-  // l[3] = pos - width - 1
-
-  // l.forEach(cell => {
-  //   cells[cell].id = 'l-shape'
-  // })
-
-
-  // // * j shape work
-  // const j = [pos, pos - 1, pos + 1, pos + 1 + width]
-
-  // //* first rotation
-  // pos = pos + width
-  // j[0] = pos
-  // j[1] = pos - width
-  // j[2] = pos + width
-  // j[3] = pos - width + 1
-
-
-  // // //* second rotation
-
-  // j[0] = pos
-  // j[1] = pos - 1
-  // j[2] = pos + 1
-  // j[3] = pos - width - 1
-
-  // //* third rotation
-
-  // j[0] = pos
-  // j[1] = pos - width
-  // j[2] = pos + width
-  // j[3] = pos + width - 1
-
-
-  // j.forEach(cell => {
-  //   cells[cell].id = 'j-shape'
-
-  // })
-
-
-
-
-  // // * t shape work
-
-  // const t = [pos, pos + width ,pos - 1, pos + 1 ]
-
-  // //* first rotation
-  // pos = pos + width
-  // t[0] = pos
-  // t[1] = pos - width
-  // t[2] = pos + width
-  // t[3] = pos + 1
-
-
-  // // //* second rotation
-
-  // t[1] = pos - width
-  // t[2] = pos + 1
-  // t[3] = pos - 1
-
-  // //* third rotation
-
-
-  // t[1] = pos - width
-  // t[2] = pos + width
-  // t[3] = pos - 1
-
-  // t.forEach(cell => {
-  //   cells[cell].id = 't-shape'
-  // })
-
-
-  cells[pos].id = 'gold-shape'
-
-
-
-
+  class S extends Tetrimino {
+    constructor(name, dimensions, className) {
+      super(name, dimensions, className)
+    }
+
+    rotateFirst() {
+      this.removeShape()
+      pos = pos + width
+      this.dimensions = [pos, pos - width, pos + 1, pos + 1 + width]
+
+      this.createShape()
+    }
+
+    rotateSecond() {
+      this.removeShape()
+      this.dimensions = sShape
+      this.createShape()
+    }
+  }
+
+
+  class Z extends Tetrimino {
+    constructor(name, dimensions, className) {
+      super(name, dimensions, className)
+    }
+
+    rotateFirst() {
+      this.removeShape()
+      pos = pos + width
+      this.dimensions = [pos, pos + width, pos + 1, pos + 1 - width]
+      this.createShape()
+    }
+
+    rotateSecond() {
+      this.removeShape()
+      this.dimensions = zShape
+      this.createShape()
+    }
+  }
+
+
+  class L extends Tetrimino {
+    constructor(name, dimensions, className) {
+      super(name, dimensions, className)
+    }
+
+    rotateFirst() {
+      this.removeShape()
+      pos = pos + width
+      this.dimensions = [pos, pos - width, pos + width, pos + 1 + width]
+      this.createShape()
+    }
+
+    rotateSecond() {
+      this.removeShape()
+      this.dimensions = [pos, pos - 1, pos + 1, pos - width + 1]
+      this.createShape()
+    }
+
+    rotateThird() {
+      this.removeShape()
+      this.dimensions = [pos, pos - width, pos + width, pos - width - 1]
+      this.createShape()
+    }
+
+    rotateFinal() {
+      pos = pos - width
+      this.removeShape()
+      this.dimensions = lShape
+      this.createShape()
+    }
+  }
+
+
+  class J extends Tetrimino {
+    constructor(name, dimensions, className) {
+      super(name, dimensions, className)
+    }
+    rotateFirst() {
+      this.removeShape()
+      pos = pos + width
+      this.dimensions = [pos, pos - width, pos + width, pos - width + 1]
+      this.createShape()
+    }
+
+    rotateSecond() {
+      this.removeShape()
+      this.dimensions = [pos, pos - 1, pos + 1, pos - width - 1]
+      this.createShape()
+    }
+
+
+    rotateThird() {
+      this.removeShape()
+      this.dimensions = [pos, pos - width, pos + width, pos + width - 1]
+      this.createShape()
+    }
+
+    rotateFinal() {
+      pos = pos - width
+      this.removeShape()
+      this.dimensions = jShape
+      this.createShape()
+    }
+  }
+
+  class T extends Tetrimino {
+    constructor(name, dimensions, className) {
+      super(name, dimensions, className)
+    }
+
+
+    rotateFirst() {
+      this.removeShape()
+      pos = pos + width
+      this.dimensions = [pos, pos - width, pos + width, pos + 1]
+      this.createShape()
+    }
+
+    rotateSecond() {
+      this.removeShape()
+      this.dimensions = [pos, pos - width, pos + 1, pos - 1]
+      this.createShape()
+    }
+
+
+    rotateThird() {
+      this.removeShape()
+      this.dimensions = [pos, pos - width, pos + width, pos - 1]
+      this.createShape()
+    }
+
+    rotateFinal() {
+      pos = pos - width
+      this.removeShape()
+      this.dimensions = tShape
+      this.createShape()
+    }
+  }
+
+
+
+  const o = new Tetrimino('o', oShape, 'o-shape')
+  const i = new I('i', iShape, 'i-shape')
+  const s = new S('s', sShape, 's-shape')
+  const z = new Z('z', zShape, 'z-shape')
+  const l = new L('l', lShape, 'l-shape')
+  const j = new J('j', jShape, 'j-shape')
+  const t = new T('t', tShape, 't-shape')
+  t.createShape()
+  t.rotateFirst()
+  t.rotateSecond()
+  t.rotateThird()
+  t.rotateFinal()
+
+
+
+  cells[pos].classList.add('gold-shape')
 
 
 }

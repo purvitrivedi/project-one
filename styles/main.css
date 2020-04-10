@@ -44,9 +44,6 @@ body {
   background-color: lightgrey;
 }
 
-#gold-shape {
-  background-color: gold;
-}
 
 .o-shape {
   background-color: black;
@@ -77,4 +74,8 @@ body {
 
 .t-shape {
   background-color: teal;
+}
+
+.gold-shape {
+  background-color: gold;
 }
