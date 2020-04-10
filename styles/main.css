@@ -48,33 +48,33 @@ body {
   background-color: gold;
 }
 
-#o-shape {
+.o-shape {
   background-color: black;
 }
 
-#i-shape {
+.i-shape {
   background-color:seagreen;
 }
 
-#s-shape {
+.s-shape {
   background-color: royalblue;
 
 }
 
-#z-shape {
+.z-shape {
   background-color: crimson;
 }
 
 
-#l-shape {
+.l-shape {
   background-color: aquamarine;
 }
 
-#j-shape {
+.j-shape {
   background-color: indianred;
 }
 
 
-#t-shape {
+.t-shape {
   background-color: teal;
 }

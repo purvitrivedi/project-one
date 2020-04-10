@@ -78,20 +78,45 @@ function init() {
 
 
 
-  // const tetriminos = [
-  //   {
-  //     name: 'o',
-  //     width: 
+  class Tetrimino {
+    constructor(name, dimensions, className) {
+      this.name = name
+      this.dimensions = dimensions
+      this.className = className
 
-  //   }
-  // ]
+    }
 
-  // // * o shape work
-  // const square = [pos, pos + 1, pos + width, pos + width + 1]
+    createShape() {
+      this.dimensions.forEach(cell => {
+        cells[cell].classList.add(this.className)
+      })
+    }
 
-  // square.forEach(cell => {
-  //   cells[cell].id = 'o-shape'
-  // })
+  }
+
+  class I extends Tetrimino {
+    constructor(name, dimensions, className) {
+      super(name, dimensions, className)
+    }
+
+    rotate() {
+      this.dimensions.forEach(cell => {
+        cells[cell].classList.remove(this.className)
+      })
+      pos = pos + width
+      this.dimensions = [pos - width, pos, pos + width, pos + width * 2]  
+
+      this.createShape()
+
+    }
+  }
+
+
+  const o = new Tetrimino('o', [pos, pos + 1, pos + width, pos + width + 1],'o-shape')
+  const i = new I('i', [pos, pos - 1, pos - 2, pos + 1], 'i-shape')
+
+  i.createShape()
+  i.rotate()
 
 
 
@@ -238,7 +263,7 @@ function init() {
 
   // //* third rotation
 
-  
+
   // t[1] = pos - width
   // t[2] = pos + width
   // t[3] = pos - 1
