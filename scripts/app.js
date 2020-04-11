@@ -16,16 +16,12 @@ function init() {
 
   let pos = 5
 
-
-
-
-
-
-
-
-
-
   createCells()
+
+
+
+
+
 
 
   // * Tetriminos
@@ -35,6 +31,7 @@ function init() {
       this.name = name
       this.dimensions = dimensions
       this.className = className
+      document.addEventListener('keyup', this.moveTetriminos)
 
     }
     createShape() {
@@ -50,7 +47,6 @@ function init() {
     }
 
     tetriminoFalling() {
-
       this.createShape()
       const timerId = setInterval(() => {
         this.removeShape()
@@ -63,6 +59,29 @@ function init() {
       }, 500)
 
     }
+
+    moveTetriminos = (e) => {
+      switch (e.keyCode) {
+        case 39:
+          console.log('should move right')
+          this.removeShape()
+          this.dimensions = this.dimensions.map(cell => {
+            return cell = cell + 1
+          })
+          break
+        case 37:
+          console.log('should move left')
+          this.removeShape()
+          this.dimensions = this.dimensions.map(cell => {
+            return cell = cell - 1
+          })
+          break
+        default:
+          console.log('invalid key')
+      }
+
+    }
+
 
   }
 
@@ -223,16 +242,13 @@ function init() {
   }
 
 
-  let oShape = [pos, pos + 1, pos + width, pos + width + 1]
+  const oShape = [pos, pos + 1, pos + width, pos + width + 1]
   const iShape = [pos, pos - 1, pos - 2, pos + 1]
   const sShape = [pos, pos + 1, pos + width, pos + width - 1]
   const zShape = [pos, pos - 1, pos + width, pos + width + 1]
   const lShape = [pos, pos - 1 + width, pos - 1, pos + 1]
   const jShape = [pos, pos - 1, pos + 1, pos + 1 + width]
   const tShape = [pos, pos + width, pos - 1, pos + 1]
-
-
-
 
   const o = new Tetrimino('o', oShape, 'o-shape')
   const i = new I('i', iShape, 'i-shape')
@@ -242,7 +258,10 @@ function init() {
   const j = new J('j', jShape, 'j-shape')
   const t = new T('t', tShape, 't-shape')
 
-  i.tetriminoFalling()
+  o.tetriminoFalling()
+
+
+
 
   //*Functions
 
@@ -257,45 +276,6 @@ function init() {
       }
     }
   }
-
-
-
-  function moveTetriminos(event) {
-
-    switch (event.keyCode) {
-      case 39:
-        console.log('should move right')
-        o.removeShape()
-        oShape = oShape.map(cell => {
-          return cell = cell + 1
-        })
-        o = new Tetrimino('o', oShape, 'o-shape')
-        console.log(oShape)
-        o.createShape()
-        break
-      case 37:
-        console.log('should move left')
-        o.removeShape()
-        oShape = oShape.map(cell => {
-          return cell = cell - 1
-        })
-        o = new Tetrimino('o', oShape, 'o-shape')
-        console.log(oShape)
-        o.createShape()
-        break
-      default:
-        console.log('invalid key')
-    }
-  }
-
-  // * Event Listeners
-
-  // document.addEventListener('keyup', moveTetriminos)
-
-
-
-
-
 
 }
 
