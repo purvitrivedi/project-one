@@ -49,6 +49,21 @@ function init() {
       })
     }
 
+    tetriminoFalling() {
+
+      this.createShape()
+      const timerId = setInterval(() => {
+        this.removeShape()
+        this.dimensions = this.dimensions.map(cell => {
+          return cell = cell + width
+        })
+        this.createShape()
+        if (Math.max(...this.dimensions) > 227) clearInterval(timerId)
+
+      }, 500)
+
+    }
+
   }
 
   class I extends Tetrimino {
@@ -218,7 +233,8 @@ function init() {
 
 
 
-  let o = new Tetrimino('o', oShape, 'o-shape')
+
+  const o = new Tetrimino('o', oShape, 'o-shape')
   const i = new I('i', iShape, 'i-shape')
   const s = new S('s', sShape, 's-shape')
   const z = new Z('z', zShape, 'z-shape')
@@ -226,21 +242,7 @@ function init() {
   const j = new J('j', jShape, 'j-shape')
   const t = new T('t', tShape, 't-shape')
 
- 
-  // o.createShape()
-
-  // cells[pos].classList.add('gold-shape')
-
-
-
-
-
-
-
-
-
-
-
+  i.tetriminoFalling()
 
   //*Functions
 
@@ -257,49 +259,33 @@ function init() {
   }
 
 
-  function tetriminoFalling() {
-    o.createShape()
-
-    const timerId = setInterval(() => {
-      o.removeShape()
-      oShape = oShape.map(cell => {
-        return cell = cell + width
-      })
-      o = new Tetrimino('o', oShape, 'o-shape')
-      console.log(oShape)
-      o.createShape()
-      // cells[pos].classList.add('gold-shape')
-
-
-      if (Math.max(...oShape) > 227) clearInterval(timerId)
-
-    }, 500)
-  }
-
-  tetriminoFalling()
-
-
-
-  // const myArray = [1,2,3,4]
-  // console.log(Math.max(...myArray))
 
   function moveTetriminos(event) {
-    cells[pos].classList.remove('gold-shape')
 
     switch (event.keyCode) {
       case 39:
         console.log('should move right')
-        pos++
+        o.removeShape()
+        oShape = oShape.map(cell => {
+          return cell = cell + 1
+        })
+        o = new Tetrimino('o', oShape, 'o-shape')
+        console.log(oShape)
+        o.createShape()
         break
       case 37:
         console.log('should move left')
-        pos--
+        o.removeShape()
+        oShape = oShape.map(cell => {
+          return cell = cell - 1
+        })
+        o = new Tetrimino('o', oShape, 'o-shape')
+        console.log(oShape)
+        o.createShape()
         break
       default:
         console.log('invalid key')
     }
-
-    // cells[pos].classList.add('gold-shape')
   }
 
   // * Event Listeners
