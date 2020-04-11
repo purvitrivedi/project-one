@@ -51,7 +51,7 @@ function init() {
       const timerId = setInterval(() => {
         this.removeShape()
         this.dimensions = this.dimensions.map(cell => {
-          return cell = cell + width
+          return cell += width
         })
         this.createShape()
         if (Math.max(...this.dimensions) > 227) clearInterval(timerId)
@@ -63,19 +63,26 @@ function init() {
     moveTetriminos = (e) => {
       switch (e.keyCode) {
         case 39:
-          console.log('should move right')
           this.removeShape()
+          console.log('should move right')
           this.dimensions = this.dimensions.map(cell => {
-            return cell = cell + 1
+            return cell += 1
           })
           break
         case 37:
-          console.log('should move left')
           this.removeShape()
+          console.log('should move left')
           this.dimensions = this.dimensions.map(cell => {
-            return cell = cell - 1
+            return cell -= 1
           })
           break
+          // case 38:
+          //   console.log('hi')
+          //   if (this.tetriminoFalling === s.tetriminoFalling) this.rotateS()
+          //   else if (this.tetriminoFalling === i.tetriminoFalling) this.rotateI()
+          //   else console.log('no')
+
+        // break
         default:
           console.log('invalid key')
       }
@@ -89,14 +96,19 @@ function init() {
     constructor(name, dimensions, className) {
       super(name, dimensions, className)
     }
-
-    rotate() {
-      this.removeShape()
-      pos = pos + width
-      this.dimensions = [pos - width, pos, pos + width, pos + width * 2]
-
-      this.createShape()
-
+    rotateI() {
+      if (this.rotateI.called) {
+        this.removeShape()
+        this.dimensions = iShape
+        this.createShape()
+        this.rotateI.called = false
+      } else {
+        this.removeShape()
+        pos = pos + width
+        this.dimensions = [pos - width, pos, pos + width, pos + width * 2]
+        this.createShape()
+        this.rotateI.called = true
+      }
     }
   }
 
@@ -106,19 +118,34 @@ function init() {
       super(name, dimensions, className)
     }
 
-    rotateFirst() {
-      this.removeShape()
-      pos = pos + width
-      this.dimensions = [pos, pos - width, pos + 1, pos + 1 + width]
-
-      this.createShape()
+    rotateS() {
+      if (this.rotateS.called) {
+        this.removeShape()
+        this.dimensions = sShape
+        this.createShape()
+        this.rotateS.called = false
+      } else {
+        this.removeShape()
+        pos = pos + width
+        this.dimensions = [pos, pos - width, pos + 1, pos + 1 + width]
+        this.createShape()
+        this.rotateS.called = true
+      }
     }
 
-    rotateSecond() {
-      this.removeShape()
-      this.dimensions = sShape
-      this.createShape()
-    }
+    // rotateFirst() {
+
+    //   this.removeShape()
+    //   pos = pos + width
+    //   this.dimensions = [pos, pos - width, pos + 1, pos + 1 + width]
+    //   this.createShape()
+    // }
+
+    // rotateSecond() {
+    //   this.removeShape()
+    //   this.dimensions = sShape
+    //   this.createShape()
+    // }
   }
 
 
@@ -258,9 +285,6 @@ function init() {
   const j = new J('j', jShape, 'j-shape')
   const t = new T('t', tShape, 't-shape')
 
-  o.tetriminoFalling()
-
-
 
 
   //*Functions
@@ -276,6 +300,46 @@ function init() {
       }
     }
   }
+
+  const myArray = ['i', 's']
+
+
+  function generate() {
+    const newShape = myArray[Math.round(Math.random() * (myArray.length - 1))]
+    if (newShape === 'i') {
+      i.tetriminoFalling()
+      console.log(newShape)
+    } else {
+      s.tetriminoFalling()
+      console.log(newShape)
+    }
+    return newShape
+  }
+
+
+  const generated =  generate()
+
+  function rotateTetriminos(event) {
+
+    if (event.keyCode === 38) {
+      if (generated === 'i') {
+        i.rotateI()
+      } else {
+        s.rotateS()
+      }
+
+
+    }
+
+  }
+
+
+
+  // * event handler
+
+  document.addEventListener('keyup', rotateTetriminos)
+
+
 
 }
 
