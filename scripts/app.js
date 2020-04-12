@@ -16,15 +16,12 @@ function init() {
 
   let pos = 5
 
+
+  // * Create Grid
   createCells()
 
 
-
-
-
-
-
-  // * Tetriminos
+  // * Declaring Tetriminos
 
   class Tetrimino {
     constructor(name, dimensions, className) {
@@ -50,16 +47,16 @@ function init() {
       this.createShape()
       const timerId = setInterval(() => {
         this.removeShape()
+        // pos = pos + width
         this.dimensions = this.dimensions.map(cell => {
           return cell += width
         })
+        console.log(pos)
         this.createShape()
         if (Math.max(...this.dimensions) > 227) clearInterval(timerId)
-
       }, 500)
 
     }
-
     moveTetriminos = (e) => {
       switch (e.keyCode) {
         case 39:
@@ -68,6 +65,7 @@ function init() {
           this.dimensions = this.dimensions.map(cell => {
             return cell += 1
           })
+          console.log(pos)
           break
         case 37:
           this.removeShape()
@@ -77,7 +75,7 @@ function init() {
           })
           break
           // case 38:
-          //   console.log('hi')
+          //   console.log('should rotate')
           //   if (this.tetriminoFalling === s.tetriminoFalling) this.rotateS()
           //   else if (this.tetriminoFalling === i.tetriminoFalling) this.rotateI()
           //   else console.log('no')
@@ -99,13 +97,17 @@ function init() {
     rotateI() {
       if (this.rotateI.called) {
         this.removeShape()
-        this.dimensions = iShape
+        for (let i = 0; i < this.dimensions.length; i++) {
+          this.dimensions[i] -= iRotate[i]
+        }
         this.createShape()
+        console.log(pos)
         this.rotateI.called = false
       } else {
         this.removeShape()
-        pos = pos + width
-        this.dimensions = [pos - width, pos, pos + width, pos + width * 2]
+        for (let i = 0; i < this.dimensions.length; i++) {
+          this.dimensions[i] += iRotate[i]
+        }
         this.createShape()
         this.rotateI.called = true
       }
@@ -121,31 +123,21 @@ function init() {
     rotateS() {
       if (this.rotateS.called) {
         this.removeShape()
-        this.dimensions = sShape
+        for (let i = 0; i < this.dimensions.length; i++) {
+          this.dimensions[i] -= sRotate[i]
+        }
         this.createShape()
         this.rotateS.called = false
       } else {
         this.removeShape()
         pos = pos + width
-        this.dimensions = [pos, pos - width, pos + 1, pos + 1 + width]
+        for (let i = 0; i < this.dimensions.length; i++) {
+          this.dimensions[i] += sRotate[i]
+        }
         this.createShape()
         this.rotateS.called = true
       }
     }
-
-    // rotateFirst() {
-
-    //   this.removeShape()
-    //   pos = pos + width
-    //   this.dimensions = [pos, pos - width, pos + 1, pos + 1 + width]
-    //   this.createShape()
-    // }
-
-    // rotateSecond() {
-    //   this.removeShape()
-    //   this.dimensions = sShape
-    //   this.createShape()
-    // }
   }
 
 
@@ -154,17 +146,23 @@ function init() {
       super(name, dimensions, className)
     }
 
-    rotateFirst() {
-      this.removeShape()
-      pos = pos + width
-      this.dimensions = [pos, pos + width, pos + 1, pos + 1 - width]
-      this.createShape()
-    }
-
-    rotateSecond() {
-      this.removeShape()
-      this.dimensions = zShape
-      this.createShape()
+    rotateZ() {
+      if (this.rotateZ.called) {
+        this.removeShape()
+        for (let i = 0; i < this.dimensions.length; i++) {
+          this.dimensions[i] -= zRotate[i]
+        }
+        this.createShape()
+        this.rotateZ.called = false
+      } else {
+        this.removeShape()
+        pos = pos + width
+        for (let i = 0; i < this.dimensions.length; i++) {
+          this.dimensions[i] += zRotate[i]
+        }
+        this.createShape()
+        this.rotateZ.called = true
+      }
     }
   }
 
@@ -269,10 +267,21 @@ function init() {
   }
 
 
-  const oShape = [pos, pos + 1, pos + width, pos + width + 1]
-  const iShape = [pos, pos - 1, pos - 2, pos + 1]
-  const sShape = [pos, pos + 1, pos + width, pos + width - 1]
-  const zShape = [pos, pos - 1, pos + width, pos + width + 1]
+
+  const oShape = [5, 6, 17, 18]
+
+  const iShape = [4, 5, 6, 7]
+  const iRotate = [2, 13, 24, 35]
+
+  const sShape = [5, 6, 16, 17]
+  const sRotate = [0, 0, -23, 1]
+
+  const zShape = [4, 5, 17, 18]
+  const zRotate = [13, 0, -11, -24]
+
+
+
+
   const lShape = [pos, pos - 1 + width, pos - 1, pos + 1]
   const jShape = [pos, pos - 1, pos + 1, pos + 1 + width]
   const tShape = [pos, pos + width, pos - 1, pos + 1]
@@ -301,38 +310,69 @@ function init() {
     }
   }
 
-  const myArray = ['i', 's']
+  // const myArray = [o.name, i.name, s.name, z.name, l.name, j.name, t.name]
+  const myArray = [z.name]
 
-
-  function generate() {
+  function generateTetrimino() {
     const newShape = myArray[Math.round(Math.random() * (myArray.length - 1))]
-    if (newShape === 'i') {
-      i.tetriminoFalling()
-      console.log(newShape)
-    } else {
-      s.tetriminoFalling()
-      console.log(newShape)
+    console.log(newShape)
+    switch (newShape) {
+      case 'o':
+        o.tetriminoFalling()
+        break
+      case 'i':
+        i.tetriminoFalling()
+        break
+      case 's':
+        s.tetriminoFalling()
+        break
+      case 'z':
+        z.tetriminoFalling()
+        break
+      case 'l':
+        l.tetriminoFalling()
+        break
+      case 'j':
+        j.tetriminoFalling()
+        break
+      default:
+        t.tetriminoFalling()
     }
     return newShape
   }
 
 
-  const generated =  generate()
+  const generated = generateTetrimino()
+
 
   function rotateTetriminos(event) {
 
     if (event.keyCode === 38) {
-      if (generated === 'i') {
-        i.rotateI()
-      } else {
-        s.rotateS()
+      switch (generated) {
+        case 'i':
+          i.rotateI()
+          break
+        case 's':
+          break
+          s.rotateS()
+        case 'z':
+          z.rotateZ()
+          break
+        case 'l':
+          l.rotateL()
+          break
+        case 'j':
+          j.rotateJ()
+          break
+        case 't':
+          t.rotateT()
+          break
+        default:
+          console.log('no rotation')
       }
-
-
     }
 
   }
-
 
 
   // * event handler
