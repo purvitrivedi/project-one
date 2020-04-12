@@ -11,15 +11,47 @@ function init() {
   const height = 20
   const cellCount = height * width
 
+  // * Create Grid
+
+  createCells()
 
   // * Game Variables
-  let pos = 5
   let rotationNum = 0
+  const oShape = [5, 6, 17, 18]
+
+  const iShape = [4, 5, 6, 7]
+  const iRotate = [2, 13, 24, 35]
+
+  const sShape = [5, 6, 16, 17]
+  const sRotate = [0, 0, -23, 1]
+
+  const zShape = [4, 5, 17, 18]
+  const zRotate = [13, 0, -11, -24]
+
+
+  const lShape = [5, 6, 4, 16]
+  const lRotateFirst = [0, -13, 13, 2]
+  const lRotateSecond = [0, 11, -11, -24]
+  const lRotateThird = [0, 13, -13, -2]
+  const lRotateLast = [0, -11, 11, 24]
+
+
+  const jShape = [5, 4, 6, 18]
+  const jRotateFirst = [0, 13, -13, -24]
+  const jRotateSecond = [0, -11, 11, -2]
+  const jRotateThird = [0, -13, 13, 24]
+  const jRotateLast = [0, 11, -11, 2]
+
+
+  const tShape = [5, 6, 4, 17]
+  const tRotateFirst = [0, -13, 13, -11]
+  const tRotateSecond = [0, 11, -11, -13]
+  const tRotateThird = [0, 13, -13, 11]
+  const tRotateLast = [0, -11, 11, 13]
 
 
 
-  // * Create Grid
-  createCells()
+
 
 
   // * Declaring Tetriminos
@@ -44,18 +76,6 @@ function init() {
       })
     }
 
-    tetriminoFalling() {
-      this.createShape()
-      const timerId = setInterval(() => {
-        this.removeShape()
-        this.dimensions = this.dimensions.map(cell => {
-          return cell += width
-        })
-        this.createShape()
-        if (Math.max(...this.dimensions) > 227) clearInterval(timerId)
-      }, 500)
-
-    }
     moveTetriminos = (e) => {
       switch (e.keyCode) {
         case 39:
@@ -64,6 +84,7 @@ function init() {
           this.dimensions = this.dimensions.map(cell => {
             return cell += 1
           })
+          console.log(this.dimensions)
           break
         case 37:
           this.removeShape()
@@ -72,19 +93,11 @@ function init() {
             return cell -= 1
           })
           break
-          // case 38:
-          //   console.log('should rotate')
-          //   if (this.tetriminoFalling === s.tetriminoFalling) this.rotateS()
-          //   else if (this.tetriminoFalling === i.tetriminoFalling) this.rotateI()
-          //   else console.log('no')
-
-        // break
         default:
-          console.log('invalid key')
+          console.log('key')
       }
 
     }
-
 
   }
 
@@ -100,7 +113,6 @@ function init() {
           return cell -= iRotate[index]
         })
         this.createShape()
-        console.log(pos)
         this.rotateI.called = false
       } else {
         this.removeShape()
@@ -129,7 +141,6 @@ function init() {
         this.rotateS.called = false
       } else {
         this.removeShape()
-        pos = pos + width
         this.dimensions = this.dimensions.map((cell, index) => {
           return cell += sRotate[index]
         })
@@ -284,49 +295,7 @@ function init() {
   }
 
 
-
-  const oShape = [5, 6, 17, 18]
-
-  const iShape = [4, 5, 6, 7]
-  const iRotate = [2, 13, 24, 35]
-
-  const sShape = [5, 6, 16, 17]
-  const sRotate = [0, 0, -23, 1]
-
-  const zShape = [4, 5, 17, 18]
-  const zRotate = [13, 0, -11, -24]
-
-
-  const lShape = [5, 6, 4, 16]
-  const lRotateFirst = [0, -13, 13, 2]
-  const lRotateSecond = [0, 11, -11, -24]
-  const lRotateThird = [0, 13, -13, -2]
-  const lRotateLast = [0, -11, 11, 24]
-
-
-  const jShape = [5, 4, 6, 18]
-  const jRotateFirst = [0, 13, -13, -24]
-  const jRotateSecond = [0, -11, 11, -2]
-  const jRotateThird = [0, -13, 13, 24]
-  const jRotateLast = [0, 11, -11, 2]
-
-
-  const tShape = [5, 6, 4, 17]
-  const tRotateFirst = [0, -13, 13, -11]
-  const tRotateSecond = [0, 11, -11, -13]
-  const tRotateThird = [0, 13, -13, 11]
-  const tRotateLast = [0, -11, 11, 13]
-
-
-  const o = new Tetrimino('o', oShape, 'o-shape')
-  const i = new I('i', iShape, 'i-shape')
-  const s = new S('s', sShape, 's-shape')
-  const z = new Z('z', zShape, 'z-shape')
-  const l = new L('l', lShape, 'l-shape')
-  const j = new J('j', jShape, 'j-shape')
-  const t = new T('t', tShape, 't-shape')
-
-
+  const tetriminos = ['o', 'i', 's', 'z', 'l', 'j', 't']
 
   //*Functions
 
@@ -339,65 +308,110 @@ function init() {
       if (i % 2 !== 0) {
         cell.classList.add('odd')
       }
+      if (i >= 228) {
+        cell.classList.add('bottom')
+      }
     }
   }
 
-  const myArray = [o.name, i.name, s.name, z.name, l.name, j.name, t.name]
 
-
-  function generateTetrimino() {
-    const newShape = myArray[Math.round(Math.random() * (myArray.length - 1))]
-    console.log(newShape)
-    switch (newShape) {
-      case 'o':
-        o.tetriminoFalling()
-        break
+  function createNewShape() {
+    const shape = tetriminos[Math.round(Math.random() * (tetriminos.length - 1))]
+    let makeShape
+    switch (shape) {
       case 'i':
-        i.tetriminoFalling()
+        makeShape = new I('i', iShape, 'i-shape')
         break
       case 's':
-        s.tetriminoFalling()
+        makeShape = new S('s', sShape, 's-shape')
         break
       case 'z':
-        z.tetriminoFalling()
+        makeShape = new Z('z', zShape, 'z-shape')
         break
       case 'l':
-        l.tetriminoFalling()
+        makeShape = new L('l', lShape, 'l-shape')
         break
       case 'j':
-        j.tetriminoFalling()
+        makeShape = new J('j', jShape, 'j-shape')
+        break
+      case 't':
+        makeShape = new T('t', tShape, 't-shape')
         break
       default:
-        t.tetriminoFalling()
+        makeShape = new Tetrimino('o', oShape, 'o-shape')
     }
-    return newShape
+    fall(makeShape)
+    return makeShape
+
+  }
+
+  const newTetrimino = createNewShape()
+
+  function fall(makeShape) {
+    makeShape.createShape()
+
+    const timerId = setInterval(() => {
+      makeShape.removeShape()
+      makeShape.dimensions = makeShape.dimensions.map(cell => {
+        return cell += width
+      })
+      makeShape.createShape()
+      if (Math.max(...makeShape.dimensions) > 227) {
+        clearInterval(timerId)
+        blocked(makeShape.dimensions)
+      }
+    }, 200)
+
   }
 
 
-  const generated = generateTetrimino()
+  const bottomGrid = document.querySelectorAll('.bottom')
+
+  function blocked(dimensions) {
+    dimensions.forEach(cell => cells[cell].classList.add('blocked'))
+    const isBlocked = regenerate()
+    console.log(isBlocked)
+    if (isBlocked) {
+      // createNewShape()
+    }
+  }
+
+
+  function regenerate() {
+    console.log('regenerate function')
+    const newArray = []
+
+    for (let i = 0; i < bottomGrid.length; i++) {
+      newArray.push(bottomGrid[i])
+    }
+
+    return newArray.some(element => element.classList.contains('blocked'))
+
+  }
+
 
 
   function rotateTetriminos(event) {
 
     if (event.keyCode === 38) {
-      switch (generated) {
+      switch (newTetrimino.name) {
         case 'i':
-          i.rotateI()
+          newTetrimino.rotateI()
           break
         case 's':
-          s.rotateS()
+          newTetrimino.rotateS()
           break
         case 'z':
-          z.rotateZ()
+          newTetrimino.rotateZ()
           break
         case 'l':
-          l.rotateL()
+          newTetrimino.rotateL()
           break
         case 'j':
-          j.rotateJ()
+          newTetrimino.rotateJ()
           break
         case 't':
-          t.rotateT()
+          newTetrimino.rotateT()
           break
         default:
           console.log('no rotation')
@@ -407,14 +421,13 @@ function init() {
   }
 
 
+
   // * event handler
 
   document.addEventListener('keyup', rotateTetriminos)
-
 
 
 }
 
 
 window.addEventListener('DOMContentLoaded', init)
-

@@ -76,6 +76,9 @@ body {
   background-color: teal;
 }
 
-.gold-shape {
+.blocked {
   background-color: gold;
+}
+
+.bottom {
 }
