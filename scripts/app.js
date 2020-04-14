@@ -331,7 +331,9 @@ function init() {
       cell.id = `cell${i}`
       cell.textContent = i
       cells.push(cell)
-
+      if (i >= 0 && i < 12){
+        cell.classList.add('top')
+      }
       if (i % 2 !== 0) {
         cell.classList.add('odd')
       }
@@ -402,16 +404,16 @@ function init() {
           makeShape.createShape()
 
         }
-
         makeShape.dimensions.forEach(element => {
           cells[element].classList.add('occupied')
         })
         clearLine()
+        if (makeShape.dimensions.some(element => cells[element].classList.contains('top'))) return
         rotationNum = 0
         // createNewShape()
         
       }
-    }, 200)
+    }, 100)
 
   }
 
@@ -454,14 +456,13 @@ function init() {
       }
     }
 
-    console.log(rowCheck)
-
     const clearRow = []
     for (let i = 0; i < rowCheck.length; i++) {
       clearRow.push(document.querySelector(`#cell${rowCheck[i]}`))
     }
     clearRow.forEach(element => element.classList.remove('occupied'))
   }
+
 
   function rotateTetriminos(event) {
 
