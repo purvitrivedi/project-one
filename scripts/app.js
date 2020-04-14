@@ -18,7 +18,6 @@ function init() {
   // * Game Variables
   let rotationNum = 0
   let newTetrimino
-  let makeShapeCells
   let blockedCells
   const newArray = []
 
@@ -71,14 +70,12 @@ function init() {
     createShape() {
       this.dimensions.forEach(cell => {
         cells[cell].classList.add(this.className)
-        cells[cell].classList.add('current')
       })
     }
 
     removeShape() {
       this.dimensions.forEach(cell => {
         cells[cell].classList.remove(this.className)
-        cells[cell].classList.remove('current')
       })
     }
 
@@ -331,42 +328,9 @@ function init() {
     for (let i = 0; i < cellCount; i++) {
       const cell = document.createElement('div')
       grid.appendChild(cell)
+      cell.id = `cell${i}`
       cell.textContent = i
       cells.push(cell)
-
-      // if (i >= 0 && i < 12) cell.classList.add('row1')
-      // if (i >= 12 && i < 24) cell.classList.add('row2')
-      // if (i >= 24 && i < 36) cell.classList.add('row3')
-      // if (i >= 36 && i < 48) cell.classList.add('row4')
-      // if (i >= 48 && i < 60) cell.classList.add('row5')
-      // if (i >= 60 && i < 72) cell.classList.add('row6')
-      // if (i >= 72 && i < 84) cell.classList.add('row7')
-      // if (i >= 84 && i < 96) cell.classList.add('row8')
-      // if (i >= 96 && i < 108) cell.classList.add('row19')
-      // if (i >= 108 && i < 120) cell.classList.add('row10')
-      // if (i >= 120 && i < 132) cell.classList.add('row11')
-      // if (i >= 132 && i < 144) cell.classList.add('row12')
-      // if (i >= 144 && i < 156) cell.classList.add('row13')
-      // if (i >= 156 && i < 168) cell.classList.add('row14')
-      // if (i >= 168 && i < 180) cell.classList.add('row15')
-      // if (i >= 180 && i < 192) cell.classList.add('row16')
-      // if (i >= 192 && i < 204) cell.classList.add('row17')
-      // if (i >= 204 && i < 216) cell.classList.add('row18')
-      // if (i >= 216 && i < 228) cell.classList.add('row19')
-      // if (i >= 228 && i < 240) cell.classList.add('row20')
-
-      // if (i % 12 === 0) cell.classList.add('column1')
-      // if (i % 12 === 1) cell.classList.add('column2')
-      // if (i % 12 === 2) cell.classList.add('column3')
-      // if (i % 12 === 3) cell.classList.add('column4')
-      // if (i % 12 === 4) cell.classList.add('column5')
-      // if (i % 12 === 5) cell.classList.add('column6')
-      // if (i % 12 === 6) cell.classList.add('column7')
-      // if (i % 12 === 7) cell.classList.add('column8')
-      // if (i % 12 === 8) cell.classList.add('column9')
-      // if (i % 12 === 9) cell.classList.add('column10')
-      // if (i % 12 === 10) cell.classList.add('column11')
-      // if (i % 12 === 11) cell.classList.add('column12')
 
       if (i % 2 !== 0) {
         cell.classList.add('odd')
@@ -420,7 +384,6 @@ function init() {
   function fall(makeShape) {
     makeShape.createShape()
     const timerId = setInterval(() => {
-      makeShapeCells = document.querySelectorAll('.current')
 
       makeShape.removeShape()
       makeShape.dimensions = makeShape.dimensions.map(cell => {
@@ -428,34 +391,77 @@ function init() {
       })
       makeShape.createShape()
 
-      if (Math.max(...makeShape.dimensions) > (cells.length - 12) || makeShape.dimensions.some(element => cells[element].classList.contains('blocked'))) {
+      if (Math.max(...makeShape.dimensions) > (cells.length - 12) || makeShape.dimensions.some(element => cells[element].classList.contains('occupied'))) {
         clearInterval(timerId)
 
-        if (makeShape.dimensions.some(element => cells[element].classList.contains('blocked'))) {
+        if (makeShape.dimensions.some(element => cells[element].classList.contains('occupied'))) {
           makeShape.removeShape()
           makeShape.dimensions = makeShape.dimensions.map(cell => {
             return cell -= width
           })
           makeShape.createShape()
-          console.log(makeShape.dimensions)
 
         }
 
         makeShape.dimensions.forEach(element => {
-          cells[element].classList.add('blocked')
+          cells[element].classList.add('occupied')
         })
+        clearLine()
         rotationNum = 0
         // createNewShape()
+        
       }
-    }, 50)
+    }, 200)
 
   }
 
 
 
-  // function clearAll() {
-  //   console.log(cells)
-  // }
+  function clearLine() {
+    blockedCells = document.querySelectorAll('.occupied')
+    console.log(blockedCells)
+    const blockedArray = []
+    blockedCells.forEach(element => blockedArray.push(parseFloat(element.textContent)))
+    console.log(blockedArray)
+    const rowCheck = []
+    for (let i = 0; i < blockedArray.length; i++) {
+      if (blockedArray[i] % 12 === 0
+        && blockedArray.includes(blockedArray[i] + 1)
+        && blockedArray.includes(blockedArray[i] + 2)
+        && blockedArray.includes(blockedArray[i] + 3)
+        && blockedArray.includes(blockedArray[i] + 4)
+        && blockedArray.includes(blockedArray[i] + 5)
+        && blockedArray.includes(blockedArray[i] + 6)
+        && blockedArray.includes(blockedArray[i] + 7)
+        && blockedArray.includes(blockedArray[i] + 8)
+        && blockedArray.includes(blockedArray[i] + 8)
+        && blockedArray.includes(blockedArray[i] + 10)
+        && blockedArray.includes(blockedArray[i] + 11)) {
+
+        rowCheck.push(blockedArray[i])
+        rowCheck.push(blockedArray[i] + 1)
+        rowCheck.push(blockedArray[i] + 2)
+        rowCheck.push(blockedArray[i] + 3)
+        rowCheck.push(blockedArray[i] + 4)
+        rowCheck.push(blockedArray[i] + 5)
+        rowCheck.push(blockedArray[i] + 6)
+        rowCheck.push(blockedArray[i] + 7)
+        rowCheck.push(blockedArray[i] + 8)
+        rowCheck.push(blockedArray[i] + 9)
+        rowCheck.push(blockedArray[i] + 10)
+        rowCheck.push(blockedArray[i] + 11)
+
+      }
+    }
+
+    console.log(rowCheck)
+
+    const clearRow = []
+    for (let i = 0; i < rowCheck.length; i++) {
+      clearRow.push(document.querySelector(`#cell${rowCheck[i]}`))
+    }
+    clearRow.forEach(element => element.classList.remove('occupied'))
+  }
 
   function rotateTetriminos(event) {
 

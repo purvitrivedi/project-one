@@ -76,7 +76,7 @@ body {
   background-color: teal;
 }
 
-.blocked {
+.occupied {
   background-color: gold;
 }
 
