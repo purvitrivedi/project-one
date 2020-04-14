@@ -17,6 +17,11 @@ function init() {
 
   // * Game Variables
   let rotationNum = 0
+  let newTetrimino
+  let makeShapeCells
+  let blockedCells
+  const newArray = []
+
   const oShape = [5, 6, 17, 18]
 
   const iShape = [4, 5, 6, 7]
@@ -53,7 +58,6 @@ function init() {
 
 
 
-
   // * Declaring Tetriminos
 
   class Tetrimino {
@@ -67,34 +71,38 @@ function init() {
     createShape() {
       this.dimensions.forEach(cell => {
         cells[cell].classList.add(this.className)
+        cells[cell].classList.add('current')
       })
     }
 
     removeShape() {
       this.dimensions.forEach(cell => {
         cells[cell].classList.remove(this.className)
+        cells[cell].classList.remove('current')
       })
     }
 
     moveTetriminos = (e) => {
+      const x = [this.dimensions[0] % width, this.dimensions[3] % width]
       switch (e.keyCode) {
         case 39:
           this.removeShape()
-          console.log('should move right')
-          this.dimensions = this.dimensions.map(cell => {
-            return cell += 1
-          })
-          console.log(this.dimensions)
+          if (x[1] < width - 1) {
+            this.dimensions = this.dimensions.map(cell => {
+              return cell += 1
+            })
+          }
           break
         case 37:
           this.removeShape()
-          console.log('should move left')
-          this.dimensions = this.dimensions.map(cell => {
-            return cell -= 1
-          })
+          if (x[0] > 0) {
+            this.dimensions = this.dimensions.map(cell => {
+              return cell -= 1
+            })
+          }
           break
         default:
-          console.log('key')
+          console.log('rotate')
       }
 
     }
@@ -107,20 +115,20 @@ function init() {
       super(name, dimensions, className)
     }
     rotateI() {
-      if (this.rotateI.called) {
+      if (rotationNum === 1) {
         this.removeShape()
         this.dimensions = this.dimensions.map((cell, index) => {
           return cell -= iRotate[index]
         })
         this.createShape()
-        this.rotateI.called = false
+        rotationNum = 0
       } else {
         this.removeShape()
         this.dimensions = this.dimensions.map((cell, index) => {
           return cell += iRotate[index]
         })
         this.createShape()
-        this.rotateI.called = true
+        rotationNum++
       }
     }
   }
@@ -132,20 +140,20 @@ function init() {
     }
 
     rotateS() {
-      if (this.rotateS.called) {
+      if (rotationNum === 1) {
         this.removeShape()
         this.dimensions = this.dimensions.map((cell, index) => {
           return cell -= sRotate[index]
         })
         this.createShape()
-        this.rotateS.called = false
+        rotationNum = 0
       } else {
         this.removeShape()
         this.dimensions = this.dimensions.map((cell, index) => {
           return cell += sRotate[index]
         })
         this.createShape()
-        this.rotateS.called = true
+        rotationNum++
       }
     }
   }
@@ -157,20 +165,20 @@ function init() {
     }
 
     rotateZ() {
-      if (this.rotateZ.called) {
+      if (rotationNum === 1) {
         this.removeShape()
         this.dimensions = this.dimensions.map((cell, index) => {
           return cell -= zRotate[index]
         })
         this.createShape()
-        this.rotateZ.called = false
+        rotationNum = 0
       } else {
         this.removeShape()
         this.dimensions = this.dimensions.map((cell, index) => {
           return cell += zRotate[index]
         })
         this.createShape()
-        this.rotateZ.called = true
+        rotationNum++
       }
     }
   }
@@ -182,7 +190,34 @@ function init() {
     }
 
     rotateL() {
-      if (rotationNum === 0) {
+      if (rotationNum === 1) {
+        console.log('second rotation')
+        this.removeShape()
+        this.dimensions = this.dimensions.map((cell, index) => {
+          return cell += lRotateSecond[index]
+        })
+        this.createShape()
+        rotationNum++
+
+      } else if (rotationNum === 2) {
+        console.log('third rotation')
+        this.removeShape()
+        this.dimensions = this.dimensions.map((cell, index) => {
+          return cell += lRotateThird[index]
+        })
+        this.createShape()
+        rotationNum++
+
+      } else if (rotationNum === 3) {
+        console.log('fourth rotation')
+        this.removeShape()
+        this.dimensions = this.dimensions.map((cell, index) => {
+          return cell += lRotateLast[index]
+        })
+        this.createShape()
+        rotationNum = 0
+      } else {
+        console.log('first rotation')
         this.removeShape()
         this.dimensions = this.dimensions.map((cell, index) => {
           return cell += lRotateFirst[index]
@@ -190,29 +225,17 @@ function init() {
         this.createShape()
         rotationNum++
 
-      } else if (rotationNum === 1) {
-        this.removeShape()
-        this.dimensions = this.dimensions.map((cell, index) => {
-          return cell += lRotateSecond[index]
-        })
-        this.createShape()
-        rotationNum++
-      } else if (rotationNum === 2) {
-        this.removeShape()
-        this.dimensions = this.dimensions.map((cell, index) => {
-          return cell += lRotateThird[index]
-        })
-        this.createShape()
-        rotationNum++
-      } else {
-        this.removeShape()
-        this.dimensions = this.dimensions.map((cell, index) => {
-          return cell += lRotateLast[index]
-        })
-        this.createShape()
-        rotationNum = 0
       }
+      console.log(rotationNum)
+
+
     }
+
+
+
+
+
+
   }
 
 
@@ -295,7 +318,12 @@ function init() {
   }
 
 
+  // const i = new I('i', iShape,'i-shape')
+
+
   const tetriminos = ['o', 'i', 's', 'z', 'l', 'j', 't']
+
+  // const tetriminos = ['l']
 
   //*Functions
 
@@ -303,8 +331,43 @@ function init() {
     for (let i = 0; i < cellCount; i++) {
       const cell = document.createElement('div')
       grid.appendChild(cell)
-      // cell.textContent = i
+      cell.textContent = i
       cells.push(cell)
+
+      // if (i >= 0 && i < 12) cell.classList.add('row1')
+      // if (i >= 12 && i < 24) cell.classList.add('row2')
+      // if (i >= 24 && i < 36) cell.classList.add('row3')
+      // if (i >= 36 && i < 48) cell.classList.add('row4')
+      // if (i >= 48 && i < 60) cell.classList.add('row5')
+      // if (i >= 60 && i < 72) cell.classList.add('row6')
+      // if (i >= 72 && i < 84) cell.classList.add('row7')
+      // if (i >= 84 && i < 96) cell.classList.add('row8')
+      // if (i >= 96 && i < 108) cell.classList.add('row19')
+      // if (i >= 108 && i < 120) cell.classList.add('row10')
+      // if (i >= 120 && i < 132) cell.classList.add('row11')
+      // if (i >= 132 && i < 144) cell.classList.add('row12')
+      // if (i >= 144 && i < 156) cell.classList.add('row13')
+      // if (i >= 156 && i < 168) cell.classList.add('row14')
+      // if (i >= 168 && i < 180) cell.classList.add('row15')
+      // if (i >= 180 && i < 192) cell.classList.add('row16')
+      // if (i >= 192 && i < 204) cell.classList.add('row17')
+      // if (i >= 204 && i < 216) cell.classList.add('row18')
+      // if (i >= 216 && i < 228) cell.classList.add('row19')
+      // if (i >= 228 && i < 240) cell.classList.add('row20')
+
+      // if (i % 12 === 0) cell.classList.add('column1')
+      // if (i % 12 === 1) cell.classList.add('column2')
+      // if (i % 12 === 2) cell.classList.add('column3')
+      // if (i % 12 === 3) cell.classList.add('column4')
+      // if (i % 12 === 4) cell.classList.add('column5')
+      // if (i % 12 === 5) cell.classList.add('column6')
+      // if (i % 12 === 6) cell.classList.add('column7')
+      // if (i % 12 === 7) cell.classList.add('column8')
+      // if (i % 12 === 8) cell.classList.add('column9')
+      // if (i % 12 === 9) cell.classList.add('column10')
+      // if (i % 12 === 10) cell.classList.add('column11')
+      // if (i % 12 === 11) cell.classList.add('column12')
+
       if (i % 2 !== 0) {
         cell.classList.add('odd')
       }
@@ -314,6 +377,11 @@ function init() {
     }
   }
 
+
+
+  // function cloneObj(obj) {
+  //   return JSON.parse(JSON.stringify(obj))
+  // }
 
   function createNewShape() {
     const shape = tetriminos[Math.round(Math.random() * (tetriminos.length - 1))]
@@ -340,56 +408,54 @@ function init() {
       default:
         makeShape = new Tetrimino('o', oShape, 'o-shape')
     }
+    newTetrimino = makeShape
     fall(makeShape)
     return makeShape
 
   }
 
-  const newTetrimino = createNewShape()
+  createNewShape()
+  const bottomGrid = document.querySelectorAll('.bottom')
 
   function fall(makeShape) {
     makeShape.createShape()
-
     const timerId = setInterval(() => {
+      makeShapeCells = document.querySelectorAll('.current')
+
       makeShape.removeShape()
       makeShape.dimensions = makeShape.dimensions.map(cell => {
         return cell += width
       })
       makeShape.createShape()
-      if (Math.max(...makeShape.dimensions) > 227) {
+
+      if (Math.max(...makeShape.dimensions) > (cells.length - 12) || makeShape.dimensions.some(element => cells[element].classList.contains('blocked'))) {
         clearInterval(timerId)
-        blocked(makeShape.dimensions)
+
+        if (makeShape.dimensions.some(element => cells[element].classList.contains('blocked'))) {
+          makeShape.removeShape()
+          makeShape.dimensions = makeShape.dimensions.map(cell => {
+            return cell -= width
+          })
+          makeShape.createShape()
+          console.log(makeShape.dimensions)
+
+        }
+
+        makeShape.dimensions.forEach(element => {
+          cells[element].classList.add('blocked')
+        })
+        rotationNum = 0
+        // createNewShape()
       }
-    }, 200)
+    }, 50)
 
   }
 
 
-  const bottomGrid = document.querySelectorAll('.bottom')
 
-  function blocked(dimensions) {
-    dimensions.forEach(cell => cells[cell].classList.add('blocked'))
-    const isBlocked = regenerate()
-    console.log(isBlocked)
-    if (isBlocked) {
-      // createNewShape()
-    }
-  }
-
-
-  function regenerate() {
-    console.log('regenerate function')
-    const newArray = []
-
-    for (let i = 0; i < bottomGrid.length; i++) {
-      newArray.push(bottomGrid[i])
-    }
-
-    return newArray.some(element => element.classList.contains('blocked'))
-
-  }
-
-
+  // function clearAll() {
+  //   console.log(cells)
+  // }
 
   function rotateTetriminos(event) {
 
@@ -419,6 +485,9 @@ function init() {
     }
 
   }
+
+
+
 
 
 
