@@ -26,8 +26,17 @@ function init() {
   const oShape = [5, 6, 17, 18]
 
 
-  const iShape = [4, 5, 6, 7]
-  const iRotate = [2, 13, 24, 35]
+  // const iShape = [4, 5, 6, 7]
+  // const iRotate = [2, 13, 24, 35]
+
+  const iShape = [5, 4, 6, 7]
+  const iRotate = [0, -11, 11, 22]
+
+  const iRotateLeft = [0, -13, 10, 21]
+  const iRotateLeftBack = [1, -12, 11, 22]
+
+
+
   // const iRotateRight = [12, -1, -14,-27]
 
   const sShape = [5, 6, 16, 17]
@@ -68,7 +77,6 @@ function init() {
       this.name = name
       this.dimensions = dimensions
       this.className = className
-      // document.addEventListener('keyup', this.moveTetriminos)
 
     }
     createShape() {
@@ -82,31 +90,6 @@ function init() {
         cells[cell].classList.remove(this.className)
       })
     }
-
-    // moveTetriminos = (e) => {
-    //   const x = [this.dimensions[0] % width, this.dimensions[3] % width]
-    //   switch (e.keyCode) {
-    //     case 39:
-    //       this.removeShape()
-    //       if (x[1] < width - 1) {
-    //         this.dimensions = this.dimensions.map(cell => {
-    //           return cell += 1
-    //         })
-    //       }
-    //       break
-    //     case 37:
-    //       this.removeShape()
-    //       if (x[0] > 0) {
-    //         this.dimensions = this.dimensions.map(cell => {
-    //           return cell -= 1
-    //         })
-    //       }
-    //       break
-    //     default:
-    //       console.log('rotate')
-    //   }
-
-    // }
 
   }
 
@@ -152,20 +135,45 @@ function init() {
     }
     rotateI() {
       if (rotationNum === 1) {
+        console.log('second rotation')
 
         if (Math.max(...this.dimensions) % 12 === 11) return
-        if (Math.max(...this.dimensions) % 12 <= 1) return
+        if (Math.max(...this.dimensions) % 12 === 0 ) {
+          console.log('i rotation left')
+          this.removeShape()
+          this.dimensions = this.dimensions.map((cell, index) => {
+            return cell = cell - iRotateLeft[index]
+            
+          })
+          this.createShape()
+          rotationNum++
+          console.log(rotationNum)
+        } else {
 
+          console.log('regular horizontal')
+          this.removeShape()
+          this.dimensions = this.dimensions.map((cell, index) => {
+            return cell -= iRotate[index]
+          })
+          this.createShape()
+          rotationNum = 0
+        }
 
+      } else if (rotationNum === 2) {
+        console.log('iRotation left back')
+        if (Math.min(...this.dimensions) <= 11) return
+        if (Math.max(...this.dimensions) > 191) return
         this.removeShape()
         this.dimensions = this.dimensions.map((cell, index) => {
-          return cell -= iRotate[index]
+          return cell += iRotateLeftBack[index]
         })
         this.createShape()
-        rotationNum = 0
+        rotationNum--
 
       } else {
-        if (Math.max(...this.dimensions) > 203) return
+        console.log('first rotation')
+        if (Math.min(...this.dimensions) <= 11) return
+        if (Math.max(...this.dimensions) > 191) return
         this.removeShape()
         this.dimensions = this.dimensions.map((cell, index) => {
           return cell += iRotate[index]
@@ -175,12 +183,11 @@ function init() {
       }
     }
     moveTetriminosI(keycode) {
-      const x = [this.dimensions[0] % width, this.dimensions[3] % width]
+      const x = [this.dimensions[0] % width, this.dimensions[3] % width, this.dimensions[1] % width, this.dimensions[2] % width]
       switch (keycode) {
         case 39:
-
           this.removeShape()
-          if (x[1] < width - 1) {
+          if (x[1] < width - 1 && x[2] < width - 1 ) {
             this.dimensions = this.dimensions.map(cell => {
               return cell += 1
             })
@@ -189,7 +196,7 @@ function init() {
           break
         case 37:
           this.removeShape()
-          if (x[0] > 0) {
+          if (x[0] > 0 && x[1] > 0 && x[2] > 0 ) {
             this.dimensions = this.dimensions.map(cell => {
               return cell -= 1
             })
@@ -544,12 +551,10 @@ function init() {
   }
 
 
-  // const i = new I('i', iShape,'i-shape')
 
+  // const tetriminos = ['o', 'i', 's', 'z', 'l', 'j', 't']
 
-  const tetriminos = ['o', 'i', 's', 'z', 'l', 'j', 't']
-
-  // const tetriminos = ['t']
+  const tetriminos = ['i']
 
   //*Functions
 
@@ -662,13 +667,7 @@ function init() {
 
 
 
-  // function changeArraytoDiv(dimensions) {
 
-  //   const divArray = []
-  //   dimensions.forEach(cell => divArray.push(document.querySelector(`#cell${cell}`)))
-  //   return divArray
-
-  // }
 
 
   function clearLine() {
@@ -712,7 +711,7 @@ function init() {
 
     console.log(clearRow)
     clearRow.forEach(element => element.classList.remove('occupied'))
-    
+
     blockedRows()
   }
 
@@ -768,14 +767,21 @@ function init() {
         newBlockedCells.push(blockedRowArrays[i][j])
       }
     }
+    console.log(newBlockedCells)
 
     const isOccupied = document.querySelector('.bottom.occupied')
+
+    // if (isOccupied === null){
+    //   newBlockedCells = newBlockedCells.map(cell => cell + width)
+    // }
+
     while (isOccupied === null) {
-      if (Math.max(...newBlockedCells) >= 228) {
+      if (Math.max(...newBlockedCells) >= 228 || newBlockedCells.length === 0) {
         break
       } else {
         newBlockedCells = newBlockedCells.map(cell => cell + width)
       }
+      console.log(newBlockedCells)
     }
 
 
