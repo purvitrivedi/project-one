@@ -19,9 +19,12 @@ function init() {
   let rotationNum = 0
   let newTetrimino
   let blockedCells
-  const newArray = []
+
+
+  // * Dimensions of all the shapes and their rotations 
 
   const oShape = [5, 6, 17, 18]
+
 
   const iShape = [4, 5, 6, 7]
   const iRotate = [2, 13, 24, 35]
@@ -105,6 +108,40 @@ function init() {
     }
 
   }
+
+  // class O extends Tetrimino {
+  //   constructor(name, dimensions, className) {
+  //     super(name, dimensions, className)
+  //   }
+
+  //   moveTetriminos(keycode) {
+  //     const x = [this.dimensions[0] % width, this.dimensions[3] % width]
+  //     switch (keycode) {
+  //       case 39:
+  //         console.log('right')
+  //         this.removeShape()
+  //         if (x[1] < width - 1) {
+  //           this.dimensions = this.dimensions.map(cell => {
+  //             return cell += 1
+  //           })
+  //         }
+  //         break
+  //       case 37:
+  //         this.removeShape()
+  //         if (x[0] > 0) {
+  //           this.dimensions = this.dimensions.map(cell => {
+  //             return cell -= 1
+  //           })
+  //         }
+  //         break
+  //       default:
+  //         console.log('rotate')
+  //     }
+
+  //   }
+
+
+  // }
 
 
   class I extends Tetrimino {
@@ -320,7 +357,7 @@ function init() {
 
   const tetriminos = ['o', 'i', 's', 'z', 'l', 'j', 't']
 
-  // const tetriminos = ['l', 'o']
+  // const tetriminos = ['o']
 
   //*Functions
 
@@ -331,7 +368,7 @@ function init() {
       cell.id = `cell${i}`
       cell.textContent = i
       cells.push(cell)
-      if (i >= 0 && i < 12){
+      if (i >= 0 && i < 12) {
         cell.classList.add('top')
       }
       if (i % 2 !== 0) {
@@ -381,6 +418,9 @@ function init() {
   }
 
   createNewShape()
+
+
+
   const bottomGrid = document.querySelectorAll('.bottom')
 
   function fall(makeShape) {
@@ -393,9 +433,10 @@ function init() {
       })
       makeShape.createShape()
 
-      if (Math.max(...makeShape.dimensions) > (cells.length - 12) || makeShape.dimensions.some(element => cells[element].classList.contains('occupied'))) {
+      if (Math.max(...makeShape.dimensions) > (cells.length - 13) || makeShape.dimensions.some(element => cells[element].classList.contains('occupied'))) {
         clearInterval(timerId)
 
+        const dimensions = changeArraytoDiv(makeShape.dimensions)
         if (makeShape.dimensions.some(element => cells[element].classList.contains('occupied'))) {
           makeShape.removeShape()
           makeShape.dimensions = makeShape.dimensions.map(cell => {
@@ -404,27 +445,42 @@ function init() {
           makeShape.createShape()
 
         }
-        makeShape.dimensions.forEach(element => {
+        makeShape.dimensions.map(element => {
           cells[element].classList.add('occupied')
         })
         clearLine()
+
+
         if (makeShape.dimensions.some(element => cells[element].classList.contains('top'))) return
+
+
         rotationNum = 0
-        // createNewShape()
-        
+        createNewShape()
+
+
       }
-    }, 300)
+    }, 200)
 
   }
 
 
 
+  function changeArraytoDiv(dimensions) {
+
+    console.log(dimensions)
+    const divArray = []
+    
+    dimensions.forEach(cell => divArray.push(document.querySelector(`#cell${cell}`)))
+    console.log(divArray)
+    return divArray
+
+  }
+
+
   function clearLine() {
     blockedCells = document.querySelectorAll('.occupied')
-    console.log(blockedCells)
     const blockedArray = []
     blockedCells.forEach(element => blockedArray.push(parseFloat(element.textContent)))
-    console.log(blockedArray)
     const rowCheck = []
     for (let i = 0; i < blockedArray.length; i++) {
       if (blockedArray[i] % 12 === 0
@@ -518,7 +574,7 @@ function init() {
     }
 
     const isOccupied = document.querySelector('.bottom.occupied')
-    if (isOccupied === null){
+    if (isOccupied === null) {
       newBlockedCells = newBlockedCells.map(cell => cell + width)
     }
 
@@ -561,6 +617,57 @@ function init() {
           console.log('no rotation')
       }
     }
+
+    // if (event.keyCode === 39) {
+    //   switch (newTetrimino.name) {
+    //     case 'i':
+    //       newTetrimino.rotateI()
+    //       break
+    //     case 's':
+    //       newTetrimino.rotateS()
+    //       break
+    //     case 'z':
+    //       newTetrimino.rotateZ()
+    //       break
+    //     case 'l':
+    //       newTetrimino.rotateL()
+    //       break
+    //     case 'j':
+    //       newTetrimino.rotateJ()
+    //       break
+    //     case 't':
+    //       newTetrimino.rotateT()
+    //       break
+    //     default:
+    //       newTetrimino.moveTetriminos(event.keyCode)
+    //   }
+    // }
+
+
+    // if (event.keyCode === 37) {
+    //   switch (newTetrimino.name) {
+    //     case 'i':
+    //       newTetrimino.rotateI()
+    //       break
+    //     case 's':
+    //       newTetrimino.rotateS()
+    //       break
+    //     case 'z':
+    //       newTetrimino.rotateZ()
+    //       break
+    //     case 'l':
+    //       newTetrimino.rotateL()
+    //       break
+    //     case 'j':
+    //       newTetrimino.rotateJ()
+    //       break
+    //     case 't':
+    //       newTetrimino.rotateT()
+    //       break
+    //     default:
+    //       newTetrimino.moveTetriminos(event.keyCode)
+    //   }
+    // }
 
   }
 
