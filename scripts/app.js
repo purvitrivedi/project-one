@@ -119,7 +119,6 @@ function init() {
       const x = [this.dimensions[0] % width, this.dimensions[3] % width]
       switch (keycode) {
         case 39:
-          console.log('right')
           this.removeShape()
           if (x[1] < width - 1) {
             this.dimensions = this.dimensions.map(cell => {
@@ -179,7 +178,7 @@ function init() {
       const x = [this.dimensions[0] % width, this.dimensions[3] % width]
       switch (keycode) {
         case 39:
-          console.log('right')
+
           this.removeShape()
           if (x[1] < width - 1) {
             this.dimensions = this.dimensions.map(cell => {
@@ -236,7 +235,7 @@ function init() {
       const x = [this.dimensions[2] % width, this.dimensions[1] % width]
       switch (keycode) {
         case 39:
-          console.log('right')
+
           this.removeShape()
           if (x[1] < width - 1) {
             this.dimensions = this.dimensions.map(cell => {
@@ -292,7 +291,6 @@ function init() {
       const x = [this.dimensions[0] % width, this.dimensions[3] % width]
       switch (keycode) {
         case 39:
-          console.log('right')
           this.removeShape()
           if (x[1] < width - 1) {
             this.dimensions = this.dimensions.map(cell => {
@@ -329,7 +327,6 @@ function init() {
     rotateL() {
       if (rotationNum === 1) {
         if (Math.min(...this.dimensions) % width === 0) return
-        console.log('second rotation')
         this.removeShape()
         this.dimensions = this.dimensions.map((cell, index) => {
           return cell += lRotateSecond[index]
@@ -339,7 +336,7 @@ function init() {
 
       } else if (rotationNum === 2) {
         if (Math.max(...this.dimensions) > 215) return
-        console.log('third rotation')
+        // console.log('third rotation')
         this.removeShape()
         this.dimensions = this.dimensions.map((cell, index) => {
           return cell += lRotateThird[index]
@@ -349,7 +346,7 @@ function init() {
 
       } else if (rotationNum === 3) {
         if (Math.max(...this.dimensions) % width === 11) return
-        console.log('fourth rotation')
+        // console.log('fourth rotation')
         this.removeShape()
         this.dimensions = this.dimensions.map((cell, index) => {
           return cell += lRotateLast[index]
@@ -358,7 +355,7 @@ function init() {
         rotationNum = 0
       } else {
         if (Math.min(...this.dimensions) <= 11) return
-        console.log('first rotation')
+        // console.log('first rotation')
         this.removeShape()
         this.dimensions = this.dimensions.map((cell, index) => {
           return cell += lRotateFirst[index]
@@ -367,14 +364,12 @@ function init() {
         rotationNum++
 
       }
-      console.log(rotationNum)
     }
 
     moveTetriminosL(keycode) {
       const x = [this.dimensions[2] % width, this.dimensions[1] % width, this.dimensions[3] % width]
       switch (keycode) {
         case 39:
-          console.log('right')
           this.removeShape()
           if (x[1] < width - 1 && x[2] < width - 1) {
             this.dimensions = this.dimensions.map(cell => {
@@ -454,7 +449,6 @@ function init() {
       const x = [this.dimensions[2] % width, this.dimensions[1] % width, this.dimensions[3] % width]
       switch (keycode) {
         case 39:
-          console.log('right')
           this.removeShape()
           if (x[1] < width - 1 && x[2] < width - 1) {
             this.dimensions = this.dimensions.map(cell => {
@@ -524,7 +518,6 @@ function init() {
       const x = [this.dimensions[2] % width, this.dimensions[1] % width, this.dimensions[3] % width]
       switch (keycode) {
         case 39:
-          console.log('right')
           this.removeShape()
           if (x[1] < width - 1 && x[2] < width - 1 && x[0] < width - 1) {
             this.dimensions = this.dimensions.map(cell => {
@@ -635,7 +628,9 @@ function init() {
       if (Math.max(...makeShape.dimensions) > (cells.length - 13) || makeShape.dimensions.some(element => cells[element].classList.contains('occupied'))) {
         clearInterval(timerId)
 
-        const dimensions = changeArraytoDiv(makeShape.dimensions)
+        // const dimensions = changeArraytoDiv(makeShape.dimensions)
+
+
         if (makeShape.dimensions.some(element => cells[element].classList.contains('occupied'))) {
           makeShape.removeShape()
           makeShape.dimensions = makeShape.dimensions.map(cell => {
@@ -667,13 +662,13 @@ function init() {
 
 
 
-  function changeArraytoDiv(dimensions) {
+  // function changeArraytoDiv(dimensions) {
 
-    const divArray = []
-    dimensions.forEach(cell => divArray.push(document.querySelector(`#cell${cell}`)))
-    return divArray
+  //   const divArray = []
+  //   dimensions.forEach(cell => divArray.push(document.querySelector(`#cell${cell}`)))
+  //   return divArray
 
-  }
+  // }
 
 
   function clearLine() {
@@ -710,12 +705,14 @@ function init() {
 
       }
     }
-
     const clearRow = []
     for (let i = 0; i < rowCheck.length; i++) {
       clearRow.push(document.querySelector(`#cell${rowCheck[i]}`))
     }
+
+    console.log(clearRow)
     clearRow.forEach(element => element.classList.remove('occupied'))
+    
     blockedRows()
   }
 
@@ -781,7 +778,6 @@ function init() {
       }
     }
 
-    console.log(newBlockedCells)
 
     const newBlockedDivs = []
     for (let i = 0; i < newBlockedCells.length; i++) {
@@ -791,6 +787,7 @@ function init() {
 
     blockedDivs.forEach(element => element.classList.remove('occupied'))
     newBlockedDivs.forEach(element => element.classList.add('occupied'))
+
 
   }
 
