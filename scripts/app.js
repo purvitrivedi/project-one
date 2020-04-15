@@ -773,9 +773,15 @@ function init() {
     }
 
     const isOccupied = document.querySelector('.bottom.occupied')
-    if (isOccupied === null) {
-      newBlockedCells = newBlockedCells.map(cell => cell + width)
+    while (isOccupied === null) {
+      if (Math.max(...newBlockedCells) >= 228) {
+        break
+      } else {
+        newBlockedCells = newBlockedCells.map(cell => cell + width)
+      }
     }
+
+    console.log(newBlockedCells)
 
     const newBlockedDivs = []
     for (let i = 0; i < newBlockedCells.length; i++) {
