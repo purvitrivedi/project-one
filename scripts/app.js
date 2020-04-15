@@ -320,7 +320,7 @@ function init() {
 
   const tetriminos = ['o', 'i', 's', 'z', 'l', 'j', 't']
 
-  // const tetriminos = ['l']
+  // const tetriminos = ['l', 'o']
 
   //*Functions
 
@@ -413,7 +413,7 @@ function init() {
         // createNewShape()
         
       }
-    }, 100)
+    }, 300)
 
   }
 
@@ -461,7 +461,78 @@ function init() {
       clearRow.push(document.querySelector(`#cell${rowCheck[i]}`))
     }
     clearRow.forEach(element => element.classList.remove('occupied'))
+    blockedRows()
   }
+
+  let blockedDivs = document.querySelectorAll('.occupied')
+
+  function blockedRows() {
+    blockedDivs = document.querySelectorAll('.occupied')
+    const blockedCells = []
+    blockedDivs.forEach(element => blockedCells.push(parseFloat(element.textContent)))
+
+    const blockedRowArrays = []
+
+
+    let rowStart = []
+    for (let i = 0; i < blockedCells.length; i++) {
+      if (blockedCells[i] !== 0) {
+        rowStart.push(blockedCells[i] - blockedCells[i] % 12)
+      }
+    }
+    rowStart = rowStart.filter((num, index) => {
+      return rowStart.indexOf(num) === index
+    })
+
+
+    for (let i = 0; i < rowStart.length; i++) {
+      let blockedRow = []
+      for (let j = 0; j < 12; j++) {
+        blockedRow.push(document.querySelector(`#cell${rowStart[i] + j}`))
+      }
+      blockedRow = blockedRow.filter(element => element.classList.contains('occupied'))
+      blockedRow = blockedRow.map(element => parseFloat(element.textContent))
+      blockedRowArrays.push(blockedRow)
+    }
+
+
+    for (let i = blockedRowArrays.length - 1; i >= 1; i--) {
+      const current = Math.min(...blockedRowArrays[i])
+      let previous = Math.max(...blockedRowArrays[i - 1])
+      let difference = current - previous
+      while (difference >= 13) {
+        blockedRowArrays[i - 1] = blockedRowArrays[i - 1].map(cell => cell + 12)
+        previous = Math.max(...blockedRowArrays[i - 1])
+        difference = current - previous
+      }
+
+    }
+
+
+
+    let newBlockedCells = []
+    for (let i = 0; i < blockedRowArrays.length; i++) {
+      for (let j = 0; j < blockedRowArrays[i].length; j++) {
+        newBlockedCells.push(blockedRowArrays[i][j])
+      }
+    }
+
+    const isOccupied = document.querySelector('.bottom.occupied')
+    if (isOccupied === null){
+      newBlockedCells = newBlockedCells.map(cell => cell + width)
+    }
+
+    const newBlockedDivs = []
+    for (let i = 0; i < newBlockedCells.length; i++) {
+      newBlockedDivs.push(document.querySelector(`#cell${newBlockedCells[i]}`))
+    }
+
+
+    blockedDivs.forEach(element => element.classList.remove('occupied'))
+    newBlockedDivs.forEach(element => element.classList.add('occupied'))
+
+  }
+
 
 
   function rotateTetriminos(event) {
