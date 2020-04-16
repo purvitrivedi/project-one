@@ -3,13 +3,17 @@ function init() {
 
   // * DOM elements
   const grid = document.querySelector('.grid')
-  const cells = []
+  const score = document.querySelector('#score-display')
+
+
 
   //* Grid Variables
 
+  const cells = []
   const width = 12
   const height = 20
   const cellCount = height * width
+
 
   // * Create Grid
 
@@ -19,6 +23,7 @@ function init() {
   let rotationNum = 0
   let newTetrimino
   let blockedCells
+  let scoreCount = 0
 
 
   // * Dimensions of all the shapes and their rotations 
@@ -567,9 +572,9 @@ function init() {
   }
 
 
-  // const tetriminos = ['o', 'i', 's', 'z', 'l', 'j', 't']
+  const tetriminos = ['o', 'i', 's', 'z', 'l', 'j', 't']
 
-  const tetriminos = ['i']
+  // const tetriminos = ['i']
 
   //*Functions
 
@@ -642,11 +647,14 @@ function init() {
         clearInterval(timerId)
         checkOccupiedCells(makeShape.dimensions)
         clearLine()
-        if (makeShape.dimensions.some(element => cells[element].classList.contains('top'))) return
+        if (makeShape.dimensions.some(element => cells[element].classList.contains('top'))) {
+          gameOver()
+          return
+        }
         rotationNum = 0
         createNewShape()
       }
-    }, 1500)
+    }, 200)
 
   }
 
@@ -666,6 +674,13 @@ function init() {
       cells[element].classList.remove(newTetrimino.className)
     })
   }
+
+  function gameOver() {
+    console.log('its overrrrrrr')
+    const occupiedcells = document.querySelectorAll('.occupied')
+    // occupiedcells.forEach(cell => cell.classList.remove('occupied'))
+  }
+
 
 
 
@@ -766,21 +781,18 @@ function init() {
       }
     }
 
-    const isOccupied = document.querySelector('.bottom.occupied')
 
-    // if (isOccupied === null){
-    //   newBlockedCells = newBlockedCells.map(cell => cell + width)
-    // }
+    const isOccupied = document.querySelector('.bottom.occupied')
 
     while (isOccupied === null) {
       if (Math.max(...newBlockedCells) >= 228 || newBlockedCells.length === 0) {
         break
       } else {
         newBlockedCells = newBlockedCells.map(cell => cell + width)
+        scoreCount += 12
       }
     }
-
-
+    score.textContent = scoreCount
     const newBlockedDivs = []
     for (let i = 0; i < newBlockedCells.length; i++) {
       newBlockedDivs.push(document.querySelector(`#cell${newBlockedCells[i]}`))
@@ -790,9 +802,7 @@ function init() {
     blockedDivs.forEach(element => element.classList.remove('occupied'))
     newBlockedDivs.forEach(element => element.classList.add('occupied'))
 
-
   }
-
 
 
   function rotateTetriminos(event) {
@@ -876,6 +886,7 @@ function init() {
   }
 
   function tetriminoDown(event) {
+    if (event.keyCode !== 40) console.log('move or rotate')
 
     const y = [
       [Math.floor(Math.max(newTetrimino.dimensions[0]) / width)],
@@ -898,7 +909,6 @@ function init() {
       })
       newTetrimino.createShape()
     }
-
   }
 
 
