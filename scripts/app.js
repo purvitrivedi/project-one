@@ -24,6 +24,7 @@ function init() {
   let newTetrimino
   let blockedCells
   let scoreCount = 0
+  let gameInMotion = false
 
 
   // * Dimensions of all the shapes and their rotations 
@@ -40,9 +41,8 @@ function init() {
   const iRotateRight = [0, -11, 14, 27]
   const iRotateRightBack = [0, -11, 14, 27]
 
+  const iRotateTop = [12, 12, 12, 12]
 
-
-  // const iRotateRight = [12, -1, -14,-27]
 
   const sShape = [5, 6, 16, 17]
   const sRotate = [0, 0, -23, 1]
@@ -173,8 +173,6 @@ function init() {
 
       } else if (rotationNum === 2) {
         console.log('iRotation left back')
-        if (Math.min(...this.dimensions) <= 11) return
-        if (Math.max(...this.dimensions) > 191) return
         this.removeShape()
         this.dimensions = this.dimensions.map((cell, index) => {
           return cell += iRotateLeftBack[index]
@@ -192,15 +190,28 @@ function init() {
         rotationNum -= 2
 
       } else {
-        console.log('first rotation')
-        if (Math.min(...this.dimensions) <= 11) return
+
+        if (Math.min(...this.dimensions) <= 11) {
+          console.log('top rotation')
+          this.removeShape()
+          this.dimensions = this.dimensions.map((cell, index) => {
+            return cell += iRotateTop[index]
+          })
+          this.createShape()
+          rotationNum = 4
+          console.log(rotationNum)
+        }
         if (Math.max(...this.dimensions) > 191) return
-        this.removeShape()
-        this.dimensions = this.dimensions.map((cell, index) => {
-          return cell += iRotate[index]
-        })
-        this.createShape()
-        rotationNum++
+        else {
+          console.log('first rotation')
+          console.log(rotationNum)
+          this.removeShape()
+          this.dimensions = this.dimensions.map((cell, index) => {
+            return cell += iRotate[index]
+          })
+          this.createShape()
+          rotationNum = 1
+        }
       }
     }
     moveTetriminosI(keycode) {
@@ -574,7 +585,7 @@ function init() {
 
   const tetriminos = ['o', 'i', 's', 'z', 'l', 'j', 't']
 
-  // const tetriminos = ['i']
+  // const tetriminos = ['s']
 
   //*Functions
 
@@ -663,7 +674,7 @@ function init() {
         rotationNum = 0
         createNewShape()
       }
-    }, 1000)
+    }, 900)
 
   }
 
@@ -691,7 +702,8 @@ Play again?`)
       document.querySelector('#start').disabled = false
       return
     }
-    if (result === true) startGame()
+    if (result === true) startGame()  
+  
   }
 
 
@@ -892,6 +904,12 @@ Play again?`)
         default:
           newTetrimino.moveTetriminosO(event.keyCode)
       }
+    }
+
+    if (event.keyCode === 32) {
+      if (gameInMotion === false)
+        startGame()
+      gameInMotion = true
     }
 
   }

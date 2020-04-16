@@ -6,7 +6,6 @@ body {
   height: 90vh;
   margin: 0;
   background: linear-gradient(black, #000099, #66c2ff, #ffffff, #ffeee6);
-  font-family: 'Monofett', cursive;
 }
 
 .controls-wrapper {
@@ -166,10 +165,12 @@ margin-top: 40px;
 
 img {
   width: 10%;
+  color: white;
 }
 
 .score {
   margin: 0 auto;
   text-align: center;
   font-size: 50px;
+  font-family: 'Monofett', cursive;
 }
