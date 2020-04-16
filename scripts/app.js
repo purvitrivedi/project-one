@@ -588,9 +588,10 @@ function init() {
       if (i >= 0 && i < 12) {
         cell.classList.add('top')
       }
-      if (i % 2 !== 0) {
+      if (i % 2 === 0) {
         cell.classList.add('odd')
       }
+
       if (i >= 228) {
         cell.classList.add('bottom')
       }
@@ -662,7 +663,7 @@ function init() {
         rotationNum = 0
         createNewShape()
       }
-    }, 200)
+    }, 1000)
 
   }
 
@@ -684,11 +685,10 @@ function init() {
   }
 
   function gameOver() {
-    console.log('its overrrrrrr')
     const result = window.confirm(`Uh-oh -- Game Over! You cleared ${scoreCount} blocks. 
 Play again?`)
     if (result === false) {
-      document.querySelector('#start').disabled = true
+      document.querySelector('#start').disabled = false
       return
     }
     if (result === true) startGame()

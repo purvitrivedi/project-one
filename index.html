@@ -1,19 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tetris</title>
   <link rel="stylesheet" href="styles/main.css">
   <script src="scripts/app.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Monofett&display=swap');
+    </style>
 </head>
+
 <body>
+  <div class="star-1 stars"></div>
+  <div class="star-2 stars"></div>
+  <div class="star-3 stars"></div>
+  <div class="star-4 stars"></div>
   <div class="controls-wrapper">
+    <img src="/assets/Tetris Logo.png" alt="Logo of Tetris">
     <button id="start">Start Game</button>
-    <p>Blocks cleared: <span id="score-display">0</span></p>
   </div>
   <div class="grid-wrapper">
     <div class="grid"></div>
   </div>
+  <p class="score">Blocks cleared: <span id="score-display">0</span></p>
+  
+  
 </body>
+
 </html>

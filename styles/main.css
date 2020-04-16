@@ -3,25 +3,49 @@
 }
 
 body {
-  height: 100vh;
+  height: 90vh;
   margin: 0;
+  background: linear-gradient(black, #000099, #66c2ff, #ffffff, #ffeee6);
+  font-family: 'Monofett', cursive;
 }
 
 .controls-wrapper {
   height: 10vh;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
+  margin-top: 30px;
+}
+
+button {
+  font-family: 'Monofett', cursive;
+  box-shadow: 0 0 20px 0 rgba(225, 225, 225, 0.9);
+  font-size: 35px;
+  flex-grow: 1;
+  background-color: white;
+  max-width: 200px;
+  text-align: center;
+margin-top: 40px;
+  padding: 10px 10px;
+  /* margin-left: 40%; */
+  margin-right: 45%;
+  border-radius: 5%;
+}
+
+.grid-wrapper p {
+  color: white;
 }
 
 .grid-wrapper {
-  height: 80vh;
+  height: 70vh;
   display: flex;
   justify-content: center;
 }
 
 .grid {
-  /* background-color: #56a0c2; */
+  margin: 5%;
+  z-index: 2;
+  background-color: white;
   align-items: center;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
   display: flex;
@@ -31,8 +55,9 @@ body {
   height: 500px;
   width: 326px;
   font-size: 10px;
-  border: 1px solid black
-
+  border-top: 1px solid black;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
 }
 
 .grid div {
@@ -47,9 +72,13 @@ body {
   background-color: lightgrey;
 }
 
+.bottom {
+  border-bottom: 1px solid black;
+}
+
 .o-shape {
   border: 1px solid white;
-  background-color:#B87E37;
+  background-color: #B87E37;
 }
 
 .i-shape {
@@ -61,7 +90,6 @@ body {
   border: 1px solid white;
   background-color: #70CA20;
 }
-
 
 .z-shape {
   border: 1px solid white;
@@ -85,5 +113,63 @@ body {
 
 .occupied {
   border: 1px solid gold;
-background-color: #56a0c2;
+  background-color: #56a0c2;
+}
+
+.stars {
+  background-color: white;
+  height: 5px;
+  width: 5px;
+  border-radius: 50%;
+  animation-iteration-count: infinite;
+}
+
+.star-1 {
+  position: absolute;
+  margin-top: 5%;
+  margin-left: 10%;
+  animation-duration: 5s;
+  animation-name: twinkle;
+  z-index: 1;
+}
+
+.star-2 {
+  position: absolute;
+  margin-top: 13%;
+  margin-left: 30%;
+  animation-duration: 2.9s;
+  animation-name: twinkle;
+}
+
+.star-3 {
+  position: absolute;
+  margin-top: 8%;
+  margin-left: 70%;
+  animation-duration: 3.1s;
+  animation-name: twinkle;
+}
+
+.star-4 {
+  position: absolute;
+  margin-top: 3%;
+  margin-left: 90%;
+  animation-duration: 3.1s;
+  animation-name: twinkle;
+}
+
+@keyframes twinkle {
+  50% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+}
+
+img {
+  width: 10%;
+}
+
+.score {
+  margin: 0 auto;
+  text-align: center;
+  font-size: 50px;
 }
