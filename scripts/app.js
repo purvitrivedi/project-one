@@ -5,6 +5,7 @@ function init() {
   const grid = document.querySelector('.grid')
   const score = document.querySelector('#score-display')
   const startButton = document.querySelector('#start')
+  const audio = document.querySelector('audio')
 
 
   //* Grid Variables
@@ -49,6 +50,9 @@ function init() {
 
   const zShape = [4, 5, 17, 18]
   const zRotate = [13, 0, -11, -24]
+
+  const zRotateLeftWall = [11, 0, -12, -25]
+  const zRotateLeftBack = [-11, 0, 12, 25]
 
 
   const lShape = [5, 6, 4, 16]
@@ -311,12 +315,32 @@ function init() {
     rotateZ() {
       if (Math.min(...this.dimensions) <= 11) return
       if (rotationNum === 1) {
+        console.log('z')
+        if (Math.max(...this.dimensions) % 12 === 0) {
+          console.log('leftwall')
+          this.removeShape()
+          this.dimensions = this.dimensions.map((cell, index) => {
+            return cell -= zRotateLeftWall[index]
+          })
+          this.createShape()
+          rotationNum = 2
+        } else {
+          this.removeShape()
+          this.dimensions = this.dimensions.map((cell, index) => {
+            return cell -= zRotate[index]
+          })
+          this.createShape()
+          rotationNum = 0
+        }
+      } else if (rotationNum === 2) {
+        console.log('leftback')
         this.removeShape()
         this.dimensions = this.dimensions.map((cell, index) => {
-          return cell -= zRotate[index]
+          return cell -= zRotateLeftBack[index]
         })
         this.createShape()
-        rotationNum = 0
+        rotationNum = 1
+
       } else {
         this.removeShape()
         this.dimensions = this.dimensions.map((cell, index) => {
@@ -327,7 +351,7 @@ function init() {
       }
     }
     moveTetriminosZ(keycode) {
-      const x = [this.dimensions[0] % width, this.dimensions[3] % width]
+      const x = [this.dimensions[0] % width, this.dimensions[3] % width, this.dimensions[1] % width, this.dimensions[2] % width]
       switch (keycode) {
         case 39:
           this.removeShape()
@@ -339,8 +363,9 @@ function init() {
           this.createShape()
           break
         case 37:
+          console.log('moves left')
           this.removeShape()
-          if (x[0] > 0) {
+          if (x[0] > 0 && x[2] > 0 && x[1] > 0 && x[3] > 0) {
             this.dimensions = this.dimensions.map(cell => {
               return cell -= 1
             })
@@ -585,7 +610,7 @@ function init() {
 
   const tetriminos = ['o', 'i', 's', 'z', 'l', 'j', 't']
 
-  // const tetriminos = ['s']
+  // const tetriminos = ['z']
 
   //*Functions
 
@@ -642,6 +667,8 @@ function init() {
 
   }
 
+
+
   function startGame() {
     const occupiedCells = document.querySelectorAll('.occupied')
     occupiedCells.forEach(cell => cell.classList.remove('occupied'))
@@ -649,6 +676,7 @@ function init() {
     rotationNum = 0
     createNewShape()
     document.querySelector('#start').disabled = true
+    startGameSound()
   }
   // createNewShape()
 
@@ -664,6 +692,7 @@ function init() {
       makeShape.createShape()
 
       if (Math.max(...makeShape.dimensions) > (cells.length - 13) || makeShape.dimensions.some(element => cells[element].classList.contains('occupied'))) {
+        playLandSound()
         clearInterval(timerId)
         checkOccupiedCells(makeShape.dimensions)
         clearLine()
@@ -674,9 +703,10 @@ function init() {
         rotationNum = 0
         createNewShape()
       }
-    }, 900)
+    }, 800)
 
   }
+
 
 
   function checkOccupiedCells(dimensions) {
@@ -700,10 +730,11 @@ function init() {
 Play again?`)
     if (result === false) {
       document.querySelector('#start').disabled = false
+      pauseLandSound()
       return
     }
-    if (result === true) startGame()  
-  
+    if (result === true) startGame()
+
   }
 
 
@@ -745,6 +776,13 @@ Play again?`)
     for (let i = 0; i < rowCheck.length; i++) {
       clearRow.push(document.querySelector(`#cell${rowCheck[i]}`))
     }
+
+    if (clearRow.length > 0) {
+      const scoreToAdd = clearRow.length / 12
+      scoreCount = scoreCount + (12 * scoreToAdd)
+      lineClearSound()
+    }
+
 
     clearRow.forEach(element => element.classList.remove('occupied'))
 
@@ -812,7 +850,6 @@ Play again?`)
         break
       } else {
         newBlockedCells = newBlockedCells.map(cell => cell + width)
-        scoreCount += 12
       }
     }
     score.textContent = scoreCount
@@ -820,7 +857,6 @@ Play again?`)
     for (let i = 0; i < newBlockedCells.length; i++) {
       newBlockedDivs.push(document.querySelector(`#cell${newBlockedCells[i]}`))
     }
-
 
     blockedDivs.forEach(element => element.classList.remove('occupied'))
     newBlockedDivs.forEach(element => element.classList.add('occupied'))
@@ -939,6 +975,37 @@ Play again?`)
       newTetrimino.createShape()
     }
   }
+
+
+  // function playIntroMusic() {
+  //   audio.src = './assets/Sounds/Theme.mp3'
+  //   audio.volume = 0.05
+  //   audio.play()
+  // }
+
+  function startGameSound() {
+    audio.src = './assets/Sounds/Loadup.wav'
+    audio.volume = 0.06
+    audio.play()
+  }
+  function playLandSound() {
+    audio.src = './assets/Sounds/Fit.wav'
+    audio.volume = 0.03
+    audio.play()
+  }
+  function pauseLandSound() {
+    audio.src = './assets/Sounds/Fit.wav'
+    audio.volume = 0.03
+    audio.pause()
+  }
+
+  function lineClearSound() {
+    pauseLandSound()
+    audio.src = './assets/Sounds/Reverb sound.flac'
+    audio.volume = 0.05
+    audio.play()
+  }
+
 
 
   // * event handler
