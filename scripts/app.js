@@ -4,7 +4,7 @@ function init() {
   // * DOM elements
   const grid = document.querySelector('.grid')
   const score = document.querySelector('#score-display')
-
+  const startButton = document.querySelector('#start')
 
 
   //* Grid Variables
@@ -630,7 +630,15 @@ function init() {
 
   }
 
-  createNewShape()
+  function startGame() {
+    const occupiedCells = document.querySelectorAll('.occupied')
+    occupiedCells.forEach(cell => cell.classList.remove('occupied'))
+    scoreCount = 0
+    rotationNum = 0
+    createNewShape()
+    document.querySelector('#start').disabled = true
+  }
+  // createNewShape()
 
 
   function fall(makeShape) {
@@ -677,11 +685,14 @@ function init() {
 
   function gameOver() {
     console.log('its overrrrrrr')
-    const occupiedcells = document.querySelectorAll('.occupied')
-    // occupiedcells.forEach(cell => cell.classList.remove('occupied'))
+    const result = window.confirm(`Uh-oh -- Game Over! You cleared ${scoreCount} blocks. 
+Play again?`)
+    if (result === false) {
+      document.querySelector('#start').disabled = true
+      return
+    }
+    if (result === true) startGame()
   }
-
-
 
 
   function clearLine() {
@@ -913,7 +924,7 @@ function init() {
 
 
   // * event handler
-
+  startButton.addEventListener('click', startGame)
   document.addEventListener('keyup', rotateTetriminos)
   document.addEventListener('keydown', tetriminoDown)
 
