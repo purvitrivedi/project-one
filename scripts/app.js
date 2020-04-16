@@ -26,9 +26,6 @@ function init() {
   const oShape = [5, 6, 17, 18]
 
 
-  // const iShape = [4, 5, 6, 7]
-  // const iRotate = [2, 13, 24, 35]
-
   const iShape = [5, 4, 6, 7]
   const iRotate = [0, -11, 11, 22]
 
@@ -124,8 +121,6 @@ function init() {
       }
 
     }
-
-
   }
 
 
@@ -138,12 +133,12 @@ function init() {
         console.log('second rotation')
 
         if (Math.max(...this.dimensions) % 12 === 11) return
-        if (Math.max(...this.dimensions) % 12 === 0 ) {
+        if (Math.max(...this.dimensions) % 12 === 0) {
           console.log('i rotation left')
           this.removeShape()
           this.dimensions = this.dimensions.map((cell, index) => {
             return cell = cell - iRotateLeft[index]
-            
+
           })
           this.createShape()
           rotationNum++
@@ -187,7 +182,7 @@ function init() {
       switch (keycode) {
         case 39:
           this.removeShape()
-          if (x[1] < width - 1 && x[2] < width - 1 ) {
+          if (x[1] < width - 1 && x[2] < width - 1) {
             this.dimensions = this.dimensions.map(cell => {
               return cell += 1
             })
@@ -196,7 +191,7 @@ function init() {
           break
         case 37:
           this.removeShape()
-          if (x[0] > 0 && x[1] > 0 && x[2] > 0 ) {
+          if (x[0] > 0 && x[1] > 0 && x[2] > 0) {
             this.dimensions = this.dimensions.map(cell => {
               return cell -= 1
             })
@@ -552,9 +547,9 @@ function init() {
 
 
 
-  // const tetriminos = ['o', 'i', 's', 'z', 'l', 'j', 't']
+  const tetriminos = ['o', 'i', 's', 'z', 'l', 'j', 't']
 
-  const tetriminos = ['i']
+  // const tetriminos = ['o']
 
   //*Functions
 
@@ -578,10 +573,6 @@ function init() {
   }
 
 
-
-  // function cloneObj(obj) {
-  //   return JSON.parse(JSON.stringify(obj))
-  // }
 
   function createNewShape() {
     const shape = tetriminos[Math.round(Math.random() * (tetriminos.length - 1))]
@@ -632,41 +623,32 @@ function init() {
 
       if (Math.max(...makeShape.dimensions) > (cells.length - 13) || makeShape.dimensions.some(element => cells[element].classList.contains('occupied'))) {
         clearInterval(timerId)
-
-        // const dimensions = changeArraytoDiv(makeShape.dimensions)
-
-
-        if (makeShape.dimensions.some(element => cells[element].classList.contains('occupied'))) {
-          makeShape.removeShape()
-          makeShape.dimensions = makeShape.dimensions.map(cell => {
-            return cell -= width
-          })
-          makeShape.createShape()
-
-        }
-        makeShape.dimensions.map(element => {
-          cells[element].classList.add('occupied')
-        })
-        makeShape.dimensions.map(element => {
-          cells[element].classList.remove(makeShape.className)
-        })
+        checkOccupiedCells(makeShape.dimensions)
         clearLine()
-
-
         if (makeShape.dimensions.some(element => cells[element].classList.contains('top'))) return
-
-
         rotationNum = 0
         createNewShape()
-
-
       }
-    }, 200)
+    }, 400)
 
   }
 
 
-
+  function checkOccupiedCells(dimensions) {
+    if (dimensions.some(element => cells[element].classList.contains('occupied'))) {
+      newTetrimino.removeShape()
+      newTetrimino.dimensions = newTetrimino.dimensions.map(cell => {
+        return cell -= width
+      })
+      newTetrimino.createShape()
+    }
+    newTetrimino.dimensions.map(element => {
+      cells[element].classList.add('occupied')
+    })
+    newTetrimino.dimensions.map(element => {
+      cells[element].classList.remove(newTetrimino.className)
+    })
+  }
 
 
 
@@ -709,15 +691,14 @@ function init() {
       clearRow.push(document.querySelector(`#cell${rowCheck[i]}`))
     }
 
-    console.log(clearRow)
     clearRow.forEach(element => element.classList.remove('occupied'))
 
-    blockedRows()
+    blockedRowsDown()
   }
 
   let blockedDivs = document.querySelectorAll('.occupied')
 
-  function blockedRows() {
+  function blockedRowsDown() {
     blockedDivs = document.querySelectorAll('.occupied')
     const blockedCells = []
     blockedDivs.forEach(element => blockedCells.push(parseFloat(element.textContent)))
@@ -767,7 +748,6 @@ function init() {
         newBlockedCells.push(blockedRowArrays[i][j])
       }
     }
-    console.log(newBlockedCells)
 
     const isOccupied = document.querySelector('.bottom.occupied')
 
@@ -781,7 +761,6 @@ function init() {
       } else {
         newBlockedCells = newBlockedCells.map(cell => cell + width)
       }
-      console.log(newBlockedCells)
     }
 
 
@@ -879,24 +858,37 @@ function init() {
 
   }
 
-  // function tetriminoDown(event) {
-  //   if (event.keyCode === 40) {
-  //     newTetrimino.removeShape()
-  //     if(this.dimensions)
-  //     newTetrimino.dimensions = newTetrimino.dimensions.map(cell => {
-  //       return cell += 12
-  //     })
-  //     newTetrimino.createShape()
-  //   }
-  // }
+  function tetriminoDown(event) {
 
+    const y = [
+      [Math.floor(Math.max(newTetrimino.dimensions[0]) / width)],
+      [Math.floor(Math.max(newTetrimino.dimensions[1]) / width)],
+      [Math.floor(Math.max(newTetrimino.dimensions[2]) / width)],
+      [Math.floor(Math.max(newTetrimino.dimensions[3]) / width)]]
+    if (event.keyCode === 40) {
+      if (y[0] < height - 2 && y[1] < height - 2 && y[2] < height - 2 && y[3] < height - 2) {
+        newTetrimino.removeShape()
+        newTetrimino.dimensions = newTetrimino.dimensions.map(cell => {
+          return cell += width
+        })
+        newTetrimino.createShape()
+      }
+    }
+    if (newTetrimino.dimensions.some(element => cells[element].classList.contains('occupied'))) {
+      newTetrimino.removeShape()
+      newTetrimino.dimensions = newTetrimino.dimensions.map(cell => {
+        return cell -= width
+      })
+      newTetrimino.createShape()
+    }
 
+  }
 
 
   // * event handler
 
   document.addEventListener('keyup', rotateTetriminos)
-  // document.addEventListener('keydown', tetriminoDown)
+  document.addEventListener('keydown', tetriminoDown)
 
 
 }
