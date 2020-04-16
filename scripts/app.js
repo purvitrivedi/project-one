@@ -32,6 +32,9 @@ function init() {
   const iRotateLeft = [0, -13, 10, 21]
   const iRotateLeftBack = [1, -12, 11, 22]
 
+  const iRotateRight = [0, -11, 14, 27]
+  const iRotateRightBack = [0, -11, 14, 27]
+
 
 
   // const iRotateRight = [12, -1, -14,-27]
@@ -131,8 +134,17 @@ function init() {
     rotateI() {
       if (rotationNum === 1) {
         console.log('second rotation')
-
-        if (Math.max(...this.dimensions) % 12 === 11) return
+        if (Math.max(...this.dimensions) % 12 >= 10) {
+          console.log('i rotation right wall')
+          this.removeShape()
+          this.dimensions = this.dimensions.map((cell, index) => {
+            return cell = cell - iRotateRight[index]
+          })
+          this.createShape()
+          rotationNum = 3
+          console.log(rotationNum)
+          return
+        }
         if (Math.max(...this.dimensions) % 12 === 0) {
           console.log('i rotation left')
           this.removeShape()
@@ -143,8 +155,8 @@ function init() {
           this.createShape()
           rotationNum++
           console.log(rotationNum)
-        } else {
 
+        } else {
           console.log('regular horizontal')
           this.removeShape()
           this.dimensions = this.dimensions.map((cell, index) => {
@@ -165,6 +177,15 @@ function init() {
         this.createShape()
         rotationNum--
 
+      } else if (rotationNum === 3) {
+        console.log('iRotation right back')
+        this.removeShape()
+        this.dimensions = this.dimensions.map((cell, index) => {
+          return cell += iRotateRightBack[index]
+        })
+        this.createShape()
+        rotationNum -= 2
+
       } else {
         console.log('first rotation')
         if (Math.min(...this.dimensions) <= 11) return
@@ -182,7 +203,7 @@ function init() {
       switch (keycode) {
         case 39:
           this.removeShape()
-          if (x[1] < width - 1 && x[2] < width - 1) {
+          if (x[1] < width - 1 && x[2] < width - 1 && x[0] < width - 1) {
             this.dimensions = this.dimensions.map(cell => {
               return cell += 1
             })
@@ -546,10 +567,9 @@ function init() {
   }
 
 
+  // const tetriminos = ['o', 'i', 's', 'z', 'l', 'j', 't']
 
-  const tetriminos = ['o', 'i', 's', 'z', 'l', 'j', 't']
-
-  // const tetriminos = ['o']
+  const tetriminos = ['i']
 
   //*Functions
 
@@ -608,9 +628,6 @@ function init() {
   createNewShape()
 
 
-
-  const bottomGrid = document.querySelectorAll('.bottom')
-
   function fall(makeShape) {
     makeShape.createShape()
     const timerId = setInterval(() => {
@@ -629,7 +646,7 @@ function init() {
         rotationNum = 0
         createNewShape()
       }
-    }, 400)
+    }, 1500)
 
   }
 
@@ -696,9 +713,9 @@ function init() {
     blockedRowsDown()
   }
 
-  let blockedDivs = document.querySelectorAll('.occupied')
 
   function blockedRowsDown() {
+    let blockedDivs = document.querySelectorAll('.occupied')
     blockedDivs = document.querySelectorAll('.occupied')
     const blockedCells = []
     blockedDivs.forEach(element => blockedCells.push(parseFloat(element.textContent)))
