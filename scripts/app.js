@@ -16,19 +16,21 @@ function init() {
   const cellCount = height * width
 
 
-  // * Create Grid
+  // * Create Tetris Grid
 
   createCells()
 
   // * Game Variables
+
   let rotationNum = 0
   let newTetrimino
   let blockedCells
   let scoreCount = 0
   let gameInMotion = false
+  const tetriminos = ['o', 'i', 's', 'z', 'l', 'j', 't']
 
 
-  // * Dimensions of all the shapes and their rotations 
+  // * Dimensions of all the shapes and their rotations (Shape I and Z have wall kick rotations as well)
 
   const oShape = [5, 6, 17, 18]
 
@@ -77,9 +79,7 @@ function init() {
 
 
 
-
-
-  // * Declaring Tetriminos
+  // * Declaring Tetriminos using classes. Class inheritance is used to give each tetrimino its unique movment and rotation settings
 
   class Tetrimino {
     constructor(name, dimensions, className) {
@@ -608,10 +608,6 @@ function init() {
   }
 
 
-  const tetriminos = ['o', 'i', 's', 'z', 'l', 'j', 't']
-
-  // const tetriminos = ['z']
-
   //*Functions
 
   function createCells() {
@@ -634,7 +630,7 @@ function init() {
     }
   }
 
-
+  // * Create new random tetrimino from tetrminos array and classes
 
   function createNewShape() {
     const shape = tetriminos[Math.round(Math.random() * (tetriminos.length - 1))]
@@ -667,7 +663,7 @@ function init() {
 
   }
 
-
+  // * Start Button
 
   function startGame() {
     const occupiedCells = document.querySelectorAll('.occupied')
@@ -678,8 +674,8 @@ function init() {
     document.querySelector('#start').disabled = true
     startGameSound()
   }
-  // createNewShape()
 
+  // * Make shapes fall down and stop at the bottom or occupied cell
 
   function fall(makeShape) {
     makeShape.createShape()
@@ -706,7 +702,6 @@ function init() {
     }, 800)
 
   }
-
 
 
   function checkOccupiedCells(dimensions) {
@@ -790,6 +785,8 @@ Play again?`)
   }
 
 
+  // * Function to bring blocked rows close to each other and remove cleared lines
+
   function blockedRowsDown() {
     let blockedDivs = document.querySelectorAll('.occupied')
     blockedDivs = document.querySelectorAll('.occupied')
@@ -798,16 +795,18 @@ Play again?`)
 
     const blockedRowArrays = []
 
+    // * Find the start of the row and locate completely blocked lines
 
     let rowStart = []
     for (let i = 0; i < blockedCells.length; i++) {
-      if (blockedCells[i] !== 0) {
+      if (blockedCells[i] % 12 !== 0) {
         rowStart.push(blockedCells[i] - blockedCells[i] % 12)
       }
     }
     rowStart = rowStart.filter((num, index) => {
       return rowStart.indexOf(num) === index
     })
+
 
 
     for (let i = 0; i < rowStart.length; i++) {
@@ -842,6 +841,7 @@ Play again?`)
       }
     }
 
+    // * clear fully unoccupied lines
 
     const isOccupied = document.querySelector('.bottom.occupied')
 
@@ -863,7 +863,7 @@ Play again?`)
 
   }
 
-
+  // * Event Listerner functions for tetrimino movements and rotation
   function rotateTetriminos(event) {
 
     if (event.keyCode === 38) {
@@ -977,11 +977,7 @@ Play again?`)
   }
 
 
-  // function playIntroMusic() {
-  //   audio.src = './assets/Sounds/Theme.mp3'
-  //   audio.volume = 0.05
-  //   audio.play()
-  // }
+  // * Functions for sound effects 
 
   function startGameSound() {
     audio.src = './assets/Sounds/Loadup.wav'
@@ -1008,7 +1004,8 @@ Play again?`)
 
 
 
-  // * event handler
+  // * event handlers
+  
   startButton.addEventListener('click', startGame)
   document.addEventListener('keyup', rotateTetriminos)
   document.addEventListener('keydown', tetriminoDown)

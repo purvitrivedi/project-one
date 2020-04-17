@@ -46,7 +46,7 @@ margin-top: 40px;
   z-index: 2;
   background-color: white;
   align-items: center;
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 20px 0 rgba(129, 136, 192, 0.9);
   display: flex;
   flex-wrap: wrap;
   height: 100%;
@@ -54,9 +54,9 @@ margin-top: 40px;
   height: 500px;
   width: 326px;
   font-size: 10px;
-  border-top: 1px solid black;
-  border-left: 1px solid black;
-  border-right: 1px solid black;
+  border-top: 1px inset #b0b3cc;
+  border-left: 1px inset #b0b3cc;
+  border-right: 1px inset #b0b3cc;
 }
 
 .grid div {
@@ -68,11 +68,11 @@ margin-top: 40px;
 }
 
 .odd {
-  background-color: lightgrey;
+  background-color: #e4e0e7;
 }
 
 .bottom {
-  border-bottom: 1px solid black;
+  border-bottom: 1px inset #b0b3cc;
 }
 
 .o-shape {
@@ -111,8 +111,8 @@ margin-top: 40px;
 }
 
 .occupied {
-  border: 1px solid gold;
-  background-color: #56a0c2;
+  border: 1px solid rgb(255, 196, 2);
+  background-color: #5c8fc8;
 }
 
 .stars {
