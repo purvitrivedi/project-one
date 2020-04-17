@@ -799,7 +799,7 @@ Play again?`)
 
     let rowStart = []
     for (let i = 0; i < blockedCells.length; i++) {
-      if (blockedCells[i] % 12 !== 0) {
+      if (blockedCells[i] !== 0) {
         rowStart.push(blockedCells[i] - blockedCells[i] % 12)
       }
     }
