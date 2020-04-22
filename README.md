@@ -10,7 +10,7 @@ The aim of the game is to get as many points as possible before the game board i
 
 # Play Tetris here
 
-* To be updated after deployement
+https://purvitrivedi.github.io/project-one/
 
 # How to Play
 
