@@ -17,71 +17,126 @@ To create a fully functioning browser-based game of your choice using vanilla Ja
 * Google Fonts
 
 
-# Play Tetris here
+# Tetris
+
+This is a 2D, single-player game based on [Math is Fun's implementation](https://www.mathsisfun.com/games/tetris.html) of the classic game Tetris.
+
+### Play deployed version
 
 https://purvitrivedi.github.io/project-one/
 
-
-
-
-
-# Overview
-
-Tetris is a puzzle game where the player has to fit different shaped blocks (called Tetriminos) together so that they make a complete line across the playing board. Once a line is achieved it is removed from the game board and the player's score is increased.
-
-The player can move the Tetriminos left and right and rotate them clockwise in 90º increments.
-
-The aim of the game is to get as many points as possible before the game board is filled with Tetriminos.
-
 ![Tetris-Gameplay](assets/TetrisGameplay.gif)
 
+## Controls
 
-# How to Play
+* Click the Start Button or press spacebar to start the game
+* Use the left  ( <img src="https://img.icons8.com/ios/50/000000/long-arrow-left.png" alt="left-arrow" width="10" /> )  and right  ( <img src="https://img.icons8.com/ios/50/000000/long-arrow-right.png" alt="right-arrow" width="10" /> )  arrow keys to move Tetriminos left and righ, respectively.
+* Up ( <img src="https://img.icons8.com/ios/50/000000/long-arrow-up.png" alt="up-arrow" width="10" /> ) arrow key rotates the Tetrimino in play
+* Down ( <img src="https://img.icons8.com/ios/50/000000/long-arrow-down.png" alt="down-arrow" width="10" /> ) arrow key accelerates the Tetrimino's downward motion
 
-* Click the Start Button or press spacebar to start game
+## Development Process
+Out of the options we were given for this project, Tetris ranked as one of the highest in difficulty. 
 
-* Left and right keys move the tetriminos left and right
+This made me quite nervous about picking it as my game of choice, however if there was a time to get over any fear of coding, it was right at the beggining! 
 
-* Up key rotates the Tetrimino in play
+I decided that strong, step-by-step planning and a 'calm mindset' would be key to making this project a success.
 
-* Down key accelerates the Tetrimino's downward motion
+I also decided to use Objects and Class Methods for this project as this was a weak point in my learning at that time and I wanted to practice it further.
 
+### Day One: 
 
-# Process
+#### Pseudocoding and Basic Structure
 
-## Timeframe
-
-9 days
-
-## Requirements
-
-* The game should stop if a Tetrimino fills the highest row of the game board
-
-* The player should be able to rotate each Tetrimino about its own axis
-
-* If a line is completed it should be removed and the pieces above should take its place
-
-
-## Technologies Used
-* HTML5 with HTML5 audio
-* CSS3 with animation
-* JavaScript (ES6)
-* Git
-* GitHub
-* Google Fonts
+> *Starter Checklist*:
+> * Create a 12 x 20 grid
+> * Make a colour move left and right
+> * Make color move downwards on timer and stop at the bottom
+> * Make all tetrimino shape as arrays
+> * Start with o-shape: ensure it falls down, moves left & right and, stops at the bottom
+> * Do this for all shapes
+> * Rotation: Start with l-shape, then move on to others
+> * Block cells contain tetriminos
+> * Collision Detection
+> * Line Clearing once a row is occupied
+> * Line dropping and shifting
+> * Game over Logic
+> * Wall Kicks
+> * Score Implementaion & Styling
 
 
-## Approach Taken
+The grid was made using the starter code provided by our instructor, Jack May. 
 
-### Day 1 & 2
+The movement of a block is achieved by adding and removing 'occupied' cell class. As the block moves position - the class is removed form the previous cell and applied to the new one. The block falls down on a timer, with the width of the grid added at each interval.
 
-To make grid of cells(divs) and make colour from from one to another:
-* Left and right using event handler
-* Downwards using Set Interval with the color stopping at the bottom
 
-To Make Shapes and move some of them: 
-* Make O tetrimino shape and apply movements
-* Create all shapes. I decided to use Object class methods for this as I would essentialy be applying similar methods to all shapes.
+### Day Two: 
+
+#### Making Shapes, Applying Movements to O-shape and using Object class methods
+
+A typical array of tetriminos would look like this - with each value in the array as the starting grid position:
+
+    const oShape = [5, 6, 17, 18]
+    const iShape = [5, 4, 6, 7]
+
+With object class methods I would essentialy be applying similar methods to all shapes. Each Tetrimino object had three properties and 2 common methods: 
+
+createShape and removeShape methods would add and remove classNames based on movements:
+
+    class Tetrimino {
+        constructor(name, dimensions, className) {
+          this.name = name
+          this.dimensions = dimensions
+          this.className = className
+
+        }
+        createShape() {
+          this.dimensions.forEach(cell => {
+            cells[cell].classList.add(this.   className)
+          })
+        }
+
+        removeShape() {
+          this.dimensions.forEach(cell => {
+            cells[cell].classList.remove(this.    className)
+          })
+        }
+
+      }
+
+They also had their own movement restrictions based on their shapes.
+
+An example:
+
+    class S extends Tetrimino {
+      constructor(name, dimensions, className) {
+        super(name, dimensions, className)
+      }
+      moveTetriminosS(keycode) {
+        const x = [this.dimensions[2] % width, this.   dimensions[1] % width]
+        switch (keycode) {
+          case 39:
+  
+            this.removeShape()
+            if (x[1] < width - 1) {
+              this.dimensions = this.dimensions.map  (cell => {
+                return cell += 1
+              })
+            }
+            this.createShape()
+            break
+          case 37:
+            this.removeShape()
+            if (x[0] > 0) {
+              this.dimensions = this.dimensions.map  (cell => {
+                return cell -= 1
+              })
+            }
+            this.createShape()
+            break
+          default:
+            console.log('rotate or move down')
+        }
+    }
 
 
 ### Day 3 & 4
@@ -124,7 +179,7 @@ To Make Shapes and move some of them:
 
 ## Wins
 
-* Got the MVP! I was nervous about making Tetris and struggled a lot in the beggining -- however, midway I decided to change my mindset to 'calm mode' and stop fearing the project. After this, I was so much faster.
+* Got the MVP! 
 
 * Worked with Objects Class methods: I always felt like this was a weak point in my JS learning. I feel a lot more comfortable.
 
@@ -132,12 +187,11 @@ To Make Shapes and move some of them:
 
 ## Challenges
 
-* Working with Object Class Methods - I learned about Object Mutability, I had to move all methods to inheritated classes so they apply as required. Although I have learned a lot, there are still a few gaps in my knowledge -- so I will be addressing those soon.
+* Working with Object Class Methods - I learned about Object Mutability, I had to move all methods to inheritated classes so they apply as required.
 
 
 ## Future Content
 
 * Speed increases with score
-* Responsive Design
-* Tetriminos retain color once occupied
+* Mobile Support
 
