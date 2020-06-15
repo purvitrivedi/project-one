@@ -33,7 +33,7 @@ The player can move the Tetriminos left and right and rotate them clockwise in 9
 
 The aim of the game is to get as many points as possible before the game board is filled with Tetriminos.
 
-![Tetris-Gameplay.gif](https://s6.gifyu.com/images/Tetris-Gameplay.gif)
+![Tetris-Gameplay](assets/TetrisGameplay.gif)
 
 
 # How to Play
