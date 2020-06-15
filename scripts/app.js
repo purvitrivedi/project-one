@@ -1,6 +1,5 @@
 function init() {
 
-
   // * DOM elements
   const grid = document.querySelector('.grid')
   const score = document.querySelector('#score-display')
@@ -608,7 +607,7 @@ function init() {
   }
 
 
-  //*Functions
+  //* Functions
 
   function createCells() {
     for (let i = 0; i < cellCount; i++) {
@@ -688,8 +687,8 @@ function init() {
       makeShape.createShape()
 
       if (Math.max(...makeShape.dimensions) > (cells.length - 13) || makeShape.dimensions.some(element => cells[element].classList.contains('occupied'))) {
-        playLandSound()
         clearInterval(timerId)
+        playLandSound()
         checkOccupiedCells(makeShape.dimensions)
         clearLine()
         if (makeShape.dimensions.some(element => cells[element].classList.contains('top'))) {
@@ -720,18 +719,27 @@ function init() {
     })
   }
 
-  function gameOver() {
-    const result = window.confirm(`Uh-oh -- Game Over! You cleared ${scoreCount} blocks. 
-Play again?`)
-    if (result === false) {
+  function gameOver(event) {
+    grid.classList.add('fade-element')
+    const playAgain = document.querySelector('#continue')
+    playAgain.classList.remove('display-none')
+    if (event.target.value === 'Yes') {
+      playAgain.classList.add('display-none')
+      grid.classList.remove('fade-element')
+      startGame()
+    } else {
       document.querySelector('#start').disabled = false
+      playAgain.classList.add('display-none')
+      grid.classList.remove('fade-element')
       pauseLandSound()
       return
     }
-    if (result === true) startGame()
+
+
+
+
 
   }
-
 
   function clearLine() {
     blockedCells = document.querySelectorAll('.occupied')
@@ -780,6 +788,7 @@ Play again?`)
 
 
     clearRow.forEach(element => element.classList.remove('occupied'))
+
 
     blockedRowsDown()
   }
@@ -951,21 +960,27 @@ Play again?`)
   }
 
   function tetriminoDown(event) {
+
     if (event.keyCode !== 40) console.log('move or rotate')
 
     const y = [
-      [Math.floor(Math.max(newTetrimino.dimensions[0]) / width)],
-      [Math.floor(Math.max(newTetrimino.dimensions[1]) / width)],
-      [Math.floor(Math.max(newTetrimino.dimensions[2]) / width)],
-      [Math.floor(Math.max(newTetrimino.dimensions[3]) / width)]]
+      [Math.ceil(Math.max(newTetrimino.dimensions[0]) / width)],
+      [Math.ceil(Math.max(newTetrimino.dimensions[1]) / width)],
+      [Math.ceil(Math.max(newTetrimino.dimensions[2]) / width)],
+      [Math.ceil(Math.max(newTetrimino.dimensions[3]) / width)]
+    ]
+
+
     if (event.keyCode === 40) {
-      if (y[0] < height - 2 && y[1] < height - 2 && y[2] < height - 2 && y[3] < height - 2) {
+      if (Math.max(...y) < height - 1) {
         newTetrimino.removeShape()
         newTetrimino.dimensions = newTetrimino.dimensions.map(cell => {
           return cell += width
         })
         newTetrimino.createShape()
       }
+
+
     }
     if (newTetrimino.dimensions.some(element => cells[element].classList.contains('occupied'))) {
       newTetrimino.removeShape()
@@ -1003,12 +1018,13 @@ Play again?`)
   }
 
 
-
   // * event handlers
-  
+
   startButton.addEventListener('click', startGame)
   document.addEventListener('keyup', rotateTetriminos)
   document.addEventListener('keydown', tetriminoDown)
+
+  document.querySelector('#play-again').addEventListener('click', gameOver)
 
 
 }

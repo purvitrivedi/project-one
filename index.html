@@ -19,10 +19,20 @@
   <div class="star-4 stars"></div>
   <div class="controls-wrapper">
     <img src="Tetris Logo.png" alt="Logo of Tetris">
-    <button id="start">Start Game</button>
+    <div class="button">
+      <button id="start">Start Game</button>
+    </div>
   </div>
   <div class="grid-wrapper">
     <div class="grid"></div>
+    <div id="continue" class="game-over-box display-none">
+      <p>Uh-Oh - Game Over! <br/> Would you like to Play again?</p>
+      <form id="play-again">
+        <input type="button" value="Yes" class="game-over-buttons"></button>
+        <input type="button" value="No" class="game-over-buttons"></button>
+      </form>
+     
+    </div>
   </div>
   <p class="score">Blocks cleared: <span id="score-display">0</span></p>
   <audio></audio>

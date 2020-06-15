@@ -3,7 +3,7 @@
 }
 
 body {
-  height: 90vh;
+  height: 95vh;
   margin: 0;
   background: linear-gradient(black, #000099, #66c2ff, #ffffff, #ffeee6);
 }
@@ -16,18 +16,21 @@ body {
   margin-top: 30px;
 }
 
-button {
+
+.button {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+}
+button, .game-over-buttons {
   font-family: 'Monofett', cursive;
   box-shadow: 0 0 20px 0 rgba(225, 225, 225, 0.9);
   font-size: 35px;
-  flex-grow: 1;
   background-color: white;
   max-width: 200px;
   text-align: center;
-margin-top: 40px;
+  margin-top: 40px;
   padding: 10px 10px;
-  /* margin-left: 40%; */
-  margin-right: 45%;
   border-radius: 5%;
 }
 
@@ -36,12 +39,16 @@ margin-top: 40px;
 }
 
 .grid-wrapper {
+  /* position: absolute; */
+  width: 100vw;
   height: 70vh;
   display: flex;
   justify-content: center;
 }
 
 .grid {
+  position: relative;
+  z-index: -1;
   margin: 5%;
   z-index: 2;
   background-color: white;
@@ -59,8 +66,31 @@ margin-top: 40px;
   border-right: 1px inset #b0b3cc;
 }
 
+.game-over-box {
+  position: absolute;
+  margin-top: 15%;
+  z-index: 100;
+  text-align: center;
+}
+
+
+.game-over-box form {
+  margin: 0 auto;
+}
+
+.game-over-box input {
+  background-color: rgba(71, 69, 69, 0.212);
+}
+
+.game-over-box p {
+  color: black;
+  text-align: center;
+  font-size: 35px;
+  font-family: 'Monofett', cursive;
+  text-shadow: 1px 1px 2px pink;
+}
+
 .grid div {
-  /* border: 1px solid pink; */
   flex-grow: 1;
   height: 25px;
   width: 25px;
@@ -168,9 +198,18 @@ img {
   color: white;
 }
 
-.score {
-  margin: 0 auto;
+.score{
+  /* background-color: black; */
+  /* margin: 60vh auto; */
   text-align: center;
   font-size: 50px;
   font-family: 'Monofett', cursive;
+}
+
+.fade-element {
+  opacity: 0.3;
+}
+
+.display-none {
+  display: none;
 }
