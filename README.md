@@ -1,3 +1,30 @@
+# General Assembly Project 1: Tetris
+
+***Timeframe***
+
+9 days
+
+## Goal:
+
+To create a fully functioning browser-based game of your choice using vanilla JavaScript
+
+## Technologies Used
+* HTML5 with HTML5 audio
+* CSS3 with animation
+* JavaScript (ES6)
+* Git
+* GitHub
+* Google Fonts
+
+
+# Play Tetris here
+
+https://purvitrivedi.github.io/project-one/
+
+
+
+
+
 # Overview
 
 Tetris is a puzzle game where the player has to fit different shaped blocks (called Tetriminos) together so that they make a complete line across the playing board. Once a line is achieved it is removed from the game board and the player's score is increased.
@@ -6,11 +33,8 @@ The player can move the Tetriminos left and right and rotate them clockwise in 9
 
 The aim of the game is to get as many points as possible before the game board is filled with Tetriminos.
 
-[![Tetris-Gameplay.gif](https://s6.gifyu.com/images/Tetris-Gameplay.gif)](https://gifyu.com/image/lu8D)
+![Tetris-Gameplay.gif](https://s6.gifyu.com/images/Tetris-Gameplay.gif)
 
-# Play Tetris here
-
-https://purvitrivedi.github.io/project-one/
 
 # How to Play
 
