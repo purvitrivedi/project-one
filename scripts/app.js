@@ -817,7 +817,6 @@ function init() {
     })
 
 
-
     for (let i = 0; i < rowStart.length; i++) {
       let blockedRow = []
       for (let j = 0; j < 12; j++) {
@@ -964,15 +963,15 @@ function init() {
     if (event.keyCode !== 40) console.log('move or rotate')
 
     const y = [
-      [Math.ceil(Math.max(newTetrimino.dimensions[0]) / width)],
-      [Math.ceil(Math.max(newTetrimino.dimensions[1]) / width)],
-      [Math.ceil(Math.max(newTetrimino.dimensions[2]) / width)],
-      [Math.ceil(Math.max(newTetrimino.dimensions[3]) / width)]
+      [Math.floor(Math.max(newTetrimino.dimensions[0]) / width)],
+      [Math.floor(Math.max(newTetrimino.dimensions[1]) / width)],
+      [Math.floor(Math.max(newTetrimino.dimensions[2]) / width)],
+      [Math.floor(Math.max(newTetrimino.dimensions[3]) / width)]
     ]
 
 
     if (event.keyCode === 40) {
-      if (Math.max(...y) < height - 1) {
+      if (Math.max(...y) < height - 2) {
         newTetrimino.removeShape()
         newTetrimino.dimensions = newTetrimino.dimensions.map(cell => {
           return cell += width

@@ -47,7 +47,7 @@ I also decided to use Objects and Class Methods for this project as this was a w
 
 #### Pseudocoding and Basic Structure
 
-> *Starter Checklist*:
+> *Checklist*:
 > * Create a 12 x 20 grid
 > * Make a colour move left and right
 > * Make color move downwards on timer and stop at the bottom
@@ -64,7 +64,9 @@ I also decided to use Objects and Class Methods for this project as this was a w
 > * Score Implementaion & Styling
 
 
-The grid was made using the starter code provided by our instructor, Jack May. 
+The 12 x 20 grid was made by creating 240 divs within the main grid wrapper. The 240 divs would be reffered as 'cells' in this README.
+
+Each cell in the was given id it's cell number as this would help in Tetrimino positioning and rotations. The top row was given a class of 'top' for game over logic and every alternative grid was give the class of 'odd' for styling.
 
 The movement of a block is achieved by adding and removing 'occupied' cell class. As the block moves position - the class is removed form the previous cell and applied to the new one. The block falls down on a timer, with the width of the grid added at each interval.
 
@@ -87,17 +89,17 @@ createShape and removeShape methods would add and remove classNames based on mov
           this.name = name
           this.dimensions = dimensions
           this.className = className
-
         }
+
         createShape() {
           this.dimensions.forEach(cell => {
-            cells[cell].classList.add(this.   className)
+            cells[cell].classList.add(this.className)
           })
         }
 
         removeShape() {
           this.dimensions.forEach(cell => {
-            cells[cell].classList.remove(this.    className)
+            cells[cell].classList.remove(this.className)
           })
         }
 
@@ -112,70 +114,136 @@ An example:
         super(name, dimensions, className)
       }
       moveTetriminosS(keycode) {
-        const x = [this.dimensions[2] % width, this.   dimensions[1] % width]
+        const x = [this.dimensions[2] % width, this.dimensions[1] % width]
         switch (keycode) {
+
           case 39:
-  
             this.removeShape()
             if (x[1] < width - 1) {
-              this.dimensions = this.dimensions.map  (cell => {
+              this.dimensions = this.dimensions.map(cell => {
                 return cell += 1
               })
             }
             this.createShape()
             break
+
           case 37:
             this.removeShape()
             if (x[0] > 0) {
-              this.dimensions = this.dimensions.map  (cell => {
+              this.dimensions = this.dimensions.map(cell => {
                 return cell -= 1
               })
             }
             this.createShape()
             break
+
           default:
             console.log('rotate or move down')
         }
     }
 
 
-### Day 3 & 4
+### Day Three & Four:
 
-* Write class methods for rotations and movements as the tetriminos are falling down 
-* Came across a bug for rotations, spent half a day to work on the fix
-* Create a new tetrimino randomly when previous tetrimino hits the floor
+#### Rotations and random Tetrimino Generation
 
-### Day 5 and 6
+Most of day three was spend on calculation the axis of rotation for the tetrimino pieces. The guide used for tetrimino rotations is provided below:
 
-* Collision Detection
-* Line Clearing
-* Line Shifting
+<img src="assets/Rotations.jpg" alt="rotation-guide" width="250">
 
-### Day 7
+Tetrimino Rotation examples are:
 
-* Realised properties of a tetrimino once it is falls down get mixed up. This meant I had to give occupied blocks a new color. 
+    const sShape = [5, 6, 16, 17]
+    const sRotate = [0, 0, -23, 1]
 
-* Game over Logic
-* MVP Achieved
-* Wall Kicks for I shape
+    const zShape = [4, 5, 17, 18]
+    const zRotate = [13, 0, -11, -24]
 
 
-### Day 8 & 9
+Once the rotation calculations were done - each Tetrimino had its own rotation method added to it's inherited class. <code> let rotationNum</code> helped me keep track of how many rotations had been made. For example, S only had two possible rotations, so the <code> rotationNum </code> switched between 0 and 1:
+
+    rotateS() {
+          if(Math.min(...this.dimensions) <=11) return
+          if(rotationNum === 1) {
+            this.removeShape()
+            this.dimensions = this.dimensions.map((cell, index) => {
+              return cell -= sRotate[index]
+            })
+            this.createShape()
+            rotationNum = 0
+          } else {
+            this.removeShape()
+            this.dimensions = this.dimensions.map((cell, index) => {
+              return cell += sRotate[index]
+            })
+            this.createShape()
+            rotationNum++
+          }
+        }
+
+Once a the Tetrimino would reach the bottom -- which is determined when some of it's cells position is greater than the last second row -- This would trigger the timer to clear. <code>createNewShape</code> function would then be called and this would restart the process again.
+
+    if(Math.max(...makeShape.dimensions) > (cells.length - 13) {
+      clearInterval(timerId)
+      rotationNum = 0
+      createNewShape()
+    }
+
+### Day Five & Six:
+
+#### Collision Detection, Line Clearing and Shifting 
+
+Collision detection just needed one more condition to the if statement: top stop the interval once one of the tetrimino cells would contain "occupied" class.
+
+    if (Math.max(...makeShape.dimensions) > (cells.length - 13) || makeShape.dimensions.some(element => cells[element].classList.contains('occupied')))
+
+After this it would call the <code>checkOccupiedCells</code> function that would take the tetrimino above the blocked cells before adding "occupied" class to all of its cells.
+
+
+The if statement also called the <code>clearLine</code> function which would check if a row of occupied cells had "occupied" class in it. The start of the row would be checked with the if statement below:
+
+    if (blockedArray[i] % 12 === 0)
+
+
+The "occupied" class would be removed from the eligible row of cells.
+
+
+The <code>blockedRowsDown</code> function executed Line shifting. It made use of an array of arrays containing occupied cells in each row. While the difference between the two seperate array of occupied cells was more the width + 1, then occupied row would move down.
+
+    for (let i = blockedRowArrays.length - 1; i >= 1; i--) {
+         const current = Math.min(...blockedRowArrays[i])
+         let previous = Math.max(...blockedRowArrays[i - 1])
+         let difference = current - previous
+         while (difference >= 13) {
+           blockedRowArrays[i - 1] = blockedRowArrays[i - 1].map  (cell => cell + 12)
+           previous = Math.max(...blockedRowArrays[i - 1])
+           difference = current - previous
+         }
+       }
+
+
+### Day Seven, Eight & Nine:
+
+#### Game Over Logic, Wall Kicks
+On Day seven, I achieved MVP after writing the game over Logic. I also implemented wall kicks for I and Z shape. 
+
+      const iRotateLeft = [0, -13, 10, 21]
+      const iRotateLeftBack = [1, -12, 11, 22]
+      const iRotateRight = [0, -11, 14, 27]
+      const iRotateRightBack = [0, -11, 14, 27]
+      const iRotateTop = [12, 12, 12, 12]
+
+I then focused on implementing a few key extra features and styling
 
 * Implement Keydown feature to accelerate downwards movement 
 * Created a score count and start button
 * Styling
 * Sounds 
-* Bug fixes
-
 
 ## Bugs
 
 * Collision Detection does not work left and right
-* Wall kicks does not work for all shops
 * Downwards acceleration stops earlier than expected
-
-* Not a bug, but a styling setback:  Removing color from occupied cells makes them transparent and therefore, the game becomes unplayable.
 
 ## Wins
 
@@ -194,4 +262,13 @@ An example:
 
 * Speed increases with score
 * Mobile Support
+* Wall kicks to work for all tetriminos
+
+## Credits
+
+* Jack May, SEI Instructor for starter code -- which helped in created the 12 x 20 grid.
+* [Math is Fun's Tetris](https://www.mathsisfun.com/games/tetris.html)
+* [Parallel Tetris research paper by Ayush Jiwarajka](https://people.ece.cornell.edu/land/courses/ece5760/FinalProjects/f2008/aj77/aj77/finalreport.html) for image that guided rotation logic.
+
+
 
