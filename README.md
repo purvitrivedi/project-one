@@ -35,6 +35,7 @@ https://purvitrivedi.github.io/project-one/
 * Down ( <img src="https://img.icons8.com/ios/50/000000/long-arrow-down.png" alt="down-arrow" width="10" /> ) arrow key accelerates the Tetrimino's downward motion
 
 ## Development Process
+
 Out of the options we were given for this project, Tetris ranked as one of the highest in difficulty. 
 
 This made me quite nervous about picking it as my game of choice, however if there was a time to get over any fear of coding, it was right at the beggining! 
@@ -49,13 +50,13 @@ I also decided to use Objects and Class Methods for this project as this was a w
 
 > *Checklist*:
 > * Create a 12 x 20 grid
-> * Make a colour move left and right
-> * Make color move downwards on timer and stop at the bottom
-> * Make all tetrimino shape as arrays
-> * Start with o-shape: ensure it falls down, moves left & right and, stops at the bottom
+> * Make color on cell move left and right
+> * Make color move downwards on a timer and stop at the bottom
+> * Make all tetrimino shapes as arrays
+> * Start coding Movement with the O-shape: ensure it falls down, moves left & right and, stops at the bottom
 > * Do this for all shapes
-> * Rotation: Start with l-shape, then move on to others
-> * Block cells contain tetriminos
+> * Rotation: Start with I-shape as it only has two rotations, then move on to others
+> * Block cells that contain tetriminos
 > * Collision Detection
 > * Line Clearing once a row is occupied
 > * Line dropping and shifting
@@ -63,12 +64,11 @@ I also decided to use Objects and Class Methods for this project as this was a w
 > * Wall Kicks
 > * Score Implementaion & Styling
 
+The 12 x 20 grid was made by creating 240 divs within the main grid wrapper. The 240 divs would be reffered to as 'cells' in this README. A single div would be reffered to as 'cell'
 
-The 12 x 20 grid was made by creating 240 divs within the main grid wrapper. The 240 divs would be reffered as 'cells' in this README.
+Each cell in the was given an id of its cell number as this would help with Tetrimino positioning and rotations. The top row was given a class of 'top' for game over logic and every alternative grid was give the class of 'odd' for styling.
 
-Each cell in the was given id it's cell number as this would help in Tetrimino positioning and rotations. The top row was given a class of 'top' for game over logic and every alternative grid was give the class of 'odd' for styling.
-
-The movement of a block is achieved by adding and removing 'occupied' cell class. As the block moves position - the class is removed form the previous cell and applied to the new one. The block falls down on a timer, with the width of the grid added at each interval.
+The movement of a cell is achieved by adding and removing 'occupied' cell class. As the block moves position - the class is removed form the previous cell and applied to the new one. The block falls down on a timer, with the entire width of the grid added at each interval.
 
 
 ### Day Two: 
@@ -80,7 +80,7 @@ A typical array of tetriminos would look like this - with each value in the arra
     const oShape = [5, 6, 17, 18]
     const iShape = [5, 4, 6, 7]
 
-With object class methods I would essentialy be applying similar methods to all shapes. Each Tetrimino object had three properties and 2 common methods: 
+With object class methods, I applied similar methods to all shapes. This means, each Tetrimino object had three properties and 2 common methods: 
 
 createShape and removeShape methods would add and remove classNames based on movements:
 
@@ -105,7 +105,7 @@ createShape and removeShape methods would add and remove classNames based on mov
 
       }
 
-They also had their own movement restrictions based on their shapes.
+They also had their own methods to achieve movement restrictions based on their shape's position.
 
 An example:
 
@@ -147,7 +147,7 @@ An example:
 
 #### Rotations and random Tetrimino Generation
 
-Most of day three was spend on calculation the axis of rotation for the tetrimino pieces. The guide used for tetrimino rotations is provided below:
+Most of day three was spend on calculating the axis of rotation for tetrimino pieces. The guide used for tetrimino rotations is provided below:
 
 <img src="assets/Rotations.jpg" alt="rotation-guide" width="250">
 
@@ -160,7 +160,7 @@ Tetrimino Rotation examples are:
     const zRotate = [13, 0, -11, -24]
 
 
-Once the rotation calculations were done - each Tetrimino had its own rotation method added to it's inherited class. <code> let rotationNum</code> helped me keep track of how many rotations had been made. For example, S only had two possible rotations, so the <code> rotationNum </code> switched between 0 and 1:
+Once the rotation calculations were done - each Tetrimino had its own rotation method added to its inherited class. <code>let rotationNum</code> helped me keep track of how many rotations had been made. For example, S only had two possible rotations, so <code>rotationNum </code> switched between 0 and 1:
 
     rotateS() {
           if(Math.min(...this.dimensions) <=11) return
@@ -181,7 +181,7 @@ Once the rotation calculations were done - each Tetrimino had its own rotation m
           }
         }
 
-Once a the Tetrimino would reach the bottom -- which is determined when some of it's cells position is greater than the last second row -- This would trigger the timer to clear. <code>createNewShape</code> function would then be called and this would restart the process again.
+Once a the Tetrimino would reach the bottom -- which is determined when some of it's cells position is greater than the last second row -- This would trigger the timer to clear. <code>createNewShape</code> function would then be called, a new random tetrimino would be created and the process would start again.
 
     if(Math.max(...makeShape.dimensions) > (cells.length - 13) {
       clearInterval(timerId)
@@ -193,22 +193,24 @@ Once a the Tetrimino would reach the bottom -- which is determined when some of 
 
 #### Collision Detection, Line Clearing and Shifting 
 
-Collision detection just needed one more condition to the if statement: top stop the interval once one of the tetrimino cells would contain "occupied" class.
+To achieve collision detection, I added one more condition to the if statement: Stop the interval once one of the tetrimino cells contain "occupied" class.
 
     if (Math.max(...makeShape.dimensions) > (cells.length - 13) || makeShape.dimensions.some(element => cells[element].classList.contains('occupied')))
 
 After this it would call the <code>checkOccupiedCells</code> function that would take the tetrimino above the blocked cells before adding "occupied" class to all of its cells.
 
 
-The if statement also called the <code>clearLine</code> function which would check if a row of occupied cells had "occupied" class in it. The start of the row would be checked with the if statement below:
+The if statement also called the <code>clearLine</code> function which would check if a row of occupied cells had "occupied" class in it. 
+
+The start of the row would be checked with the if statement below:
 
     if (blockedArray[i] % 12 === 0)
 
 
-The "occupied" class would be removed from the eligible row of cells.
+Then, the "occupied" class would be removed from the eligible row of cells.
 
 
-The <code>blockedRowsDown</code> function executed Line shifting. It made use of an array of arrays containing occupied cells in each row. While the difference between the two seperate array of occupied cells was more the width + 1, then occupied row would move down.
+The <code>blockedRowsDown</code> function executed Line shifting. It made use of an array of arrays containing occupied cells in each row. <code>while</code> the difference between the two seperate arrays of occupied cells was more the width + 1, the top occupied row would move down.
 
     for (let i = blockedRowArrays.length - 1; i >= 1; i--) {
          const current = Math.min(...blockedRowArrays[i])
@@ -233,10 +235,10 @@ On Day seven, I achieved MVP after writing the game over Logic. I also implement
       const iRotateRightBack = [0, -11, 14, 27]
       const iRotateTop = [12, 12, 12, 12]
 
-I then focused on implementing a few key extra features and styling
+Then, I focused on implementing a few key extra features and styling
 
 * Implement Keydown feature to accelerate downwards movement 
-* Created a score count and start button
+* Score count and start button
 * Styling
 * Sounds 
 
@@ -257,6 +259,12 @@ I then focused on implementing a few key extra features and styling
 
 * Working with Object Class Methods - I learned about Object Mutability, I had to move all methods to inheritated classes so they apply as required.
 
+
+## Key Learnings
+
+* **JS Fundamentals**: This was my first big coding project, and since it was strong on logic - it really helped my solidify basic JS concepts & array methods.
+
+* **Knowing when to take a break**: This project taught me that I should step away, if I've been trying to solve something for too long and not making progress. The break can give you much needed rest and you'll likely come back with a better idea on how to solve the problem.
 
 ## Future Content
 
