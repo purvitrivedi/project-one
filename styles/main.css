@@ -16,12 +16,12 @@ body {
   margin-top: 30px;
 }
 
-
 .button {
   position: absolute;
   width: 100%;
   text-align: center;
 }
+
 button, .game-over-buttons {
   font-family: 'Monofett', cursive;
   box-shadow: 0 0 20px 0 rgba(225, 225, 225, 0.9);
@@ -72,7 +72,6 @@ button, .game-over-buttons {
   z-index: 100;
   text-align: center;
 }
-
 
 .game-over-box form {
   margin: 0 auto;
@@ -198,9 +197,7 @@ img {
   color: white;
 }
 
-.score{
-  /* background-color: black; */
-  /* margin: 60vh auto; */
+.score {
   text-align: center;
   font-size: 50px;
   font-family: 'Monofett', cursive;
@@ -212,4 +209,43 @@ img {
 
 .display-none {
   display: none;
+}
+
+.touch-screen {
+  display: none;
+}
+
+@media (max-height: 760px) {
+  body {
+    position: relative;
+  }
+  .score {
+    position: absolute;
+    top: 0px;
+    right: 10px;
+    font-size: 30px;
+    color: white;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .controls-wrapper, .grid-wrapper, .score {
+    display:none;
+  }
+
+  body {
+    height: 100vh;
+    background: linear-gradient(black, #000099, #66c2ff, #000099);
+    display: flex;
+    align-items: center;
+    }
+
+  .touch-screen {
+    margin: 10px;
+    display: block;
+    font-size: 45px;
+    color: rgb(254, 255, 196);
+    font-family: 'Monofett', cursive, Arial, Helvetica, sans-serif;
+    text-align: center;
+  }
 }
